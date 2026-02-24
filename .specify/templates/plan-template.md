@@ -31,7 +31,15 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+Verify compliance with all five InnovatEPAM Portal principles before proceeding:
+
+- [ ] **I. API-First Design** — Are endpoint contracts designed/documented before implementation?
+- [ ] **II. Security by Default** — Are auth, password hashing, upload validation, and secret handling addressed?
+- [ ] **III. Test-First** — Are tests for critical paths (auth, idea submission, evaluation) written to fail first?
+- [ ] **IV. Layered Architecture** — Does the design place logic in the correct layer (routes/services/data-access)?
+- [ ] **V. Phased Simplicity** — Is the Phase 1 tech stack (SQLite, Context API) respected, or is complexity justified in Complexity Tracking?
+
+> If any gate fails, document the violation and resolution before Phase 1 design begins.
 
 ## Project Structure
 
