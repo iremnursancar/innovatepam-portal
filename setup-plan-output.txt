@@ -1,0 +1,2 @@
+﻿Copied plan template to C:\Users\Mim. Can Sancar\Desktop\innovatepam-portal\specs\001-phase1-mvp\plan.md
+{"FEATURE_SPEC":"C:\\Users\\Mim. Can Sancar\\Desktop\\innovatepam-portal\\specs\\001-phase1-mvp\\spec.md","IMPL_PLAN":"C:\\Users\\Mim. Can Sancar\\Desktop\\innovatepam-portal\\specs\\001-phase1-mvp\\plan.md","SPECS_DIR":"C:\\Users\\Mim. Can Sancar\\Desktop\\innovatepam-portal\\specs\\001-phase1-mvp","BRANCH":"001-phase1-mvp","HAS_GIT":true}
