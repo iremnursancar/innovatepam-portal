@@ -2,6 +2,8 @@
 
 const { upsertEvaluation } = require('../repositories/evaluationRepository')
 const { findById: findIdeaById, updateStatus } = require('../repositories/ideaRepository')
+const { recordActivity } = require('../repositories/activityRepository')
+const { recordStatusChange } = require('../repositories/statusHistoryRepository')
 
 const VALID_DECISIONS = ['accepted', 'rejected']
 
@@ -41,6 +43,14 @@ function evaluate(ideaId, admin, decision, comment) {
 
   // Sync idea status
   const updatedIdea = updateStatus(ideaId, decision)
+
+  try {
+    const type = decision === 'accepted' ? 'idea_accepted' : 'idea_rejected'
+    recordActivity({ type, user_email: admin.email, idea_title: idea.title })
+  } catch { /* non-critical */ }
+  try {
+    recordStatusChange({ ideaId, status: decision, changedBy: admin.email })
+  } catch { /* non-critical */ }
 
   return { idea: updatedIdea, evaluation }
 }

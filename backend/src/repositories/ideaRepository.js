@@ -34,6 +34,14 @@ const SQL = {
     WHERE  i.submitter_id = ?
     ORDER  BY i.created_at DESC`,
 
+  // Own ideas + all public ideas from others
+  findVisibleToSubmitter: `
+    SELECT i.*, u.email AS submitter_email
+    FROM   ideas i
+    JOIN   users u ON u.id = i.submitter_id
+    WHERE  i.submitter_id = ? OR i.is_public = 1
+    ORDER  BY i.created_at DESC`,
+
   findAll: `
     SELECT i.*, u.email AS submitter_email
     FROM   ideas i
@@ -41,12 +49,17 @@ const SQL = {
     ORDER  BY i.created_at DESC`,
 
   create: `
-    INSERT INTO ideas (title, description, category, submitter_id)
-    VALUES (?, ?, ?, ?)`,
+    INSERT INTO ideas (title, description, category, submitter_id, is_public)
+    VALUES (?, ?, ?, ?, ?)`,
 
   updateStatus: `
     UPDATE ideas
     SET    status = ?, updated_at = datetime('now')
+    WHERE  id = ?`,
+
+  updateIsPublic: `
+    UPDATE ideas
+    SET    is_public = ?, updated_at = datetime('now')
     WHERE  id = ?`,
 }
 
@@ -67,6 +80,13 @@ function findBySubmitter(submitterId) {
 }
 
 /**
+ * @param {number} submitterId  (for visibility: own + public)
+ */
+function findVisibleToSubmitter(submitterId) {
+  return getDb().prepare(SQL.findVisibleToSubmitter).all(submitterId)
+}
+
+/**
  * Returns every idea (admin view).
  */
 function findAll() {
@@ -74,12 +94,12 @@ function findAll() {
 }
 
 /**
- * @param {{ title, description, category, submitterId }} data
+ * @param {{ title, description, category, submitterId, isPublic }} data
  * @returns newly created idea row
  */
-function createIdea({ title, description, category, submitterId }) {
+function createIdea({ title, description, category, submitterId, isPublic = false }) {
   const db = getDb()
-  const result = db.prepare(SQL.create).run(title, description, category, submitterId)
+  const result = db.prepare(SQL.create).run(title, description, category, submitterId, isPublic ? 1 : 0)
   return findById(result.lastInsertRowid)
 }
 
@@ -92,12 +112,23 @@ function updateStatus(id, status) {
   return findById(id)
 }
 
+/**
+ * @param {number} id
+ * @param {boolean} isPublic
+ */
+function updateIsPublic(id, isPublic) {
+  getDb().prepare(SQL.updateIsPublic).run(isPublic ? 1 : 0, id)
+  return findById(id)
+}
+
 module.exports = {
   VALID_CATEGORIES,
   VALID_STATUSES,
   findById,
   findBySubmitter,
+  findVisibleToSubmitter,
   findAll,
   createIdea,
   updateStatus,
+  updateIsPublic,
 }
