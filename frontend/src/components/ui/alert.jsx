@@ -7,10 +7,10 @@ import { cn } from '@/lib/utils'
  */
 const Alert = React.forwardRef(({ className, variant = 'info', ...props }, ref) => {
   const variantClasses = {
-    error:   'border-red-200   bg-red-50   text-red-800',
-    success: 'border-accent-200 bg-accent-50 text-accent-800',
-    warning: 'border-yellow-200 bg-yellow-50 text-yellow-800',
-    info:    'border-blue-200  bg-blue-50  text-blue-800',
+    error:   'border-rose-500/30   bg-rose-500/10   text-rose-300',
+    success: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300',
+    warning: 'border-amber-500/30  bg-amber-500/10  text-amber-300',
+    info:    'border-cyan-500/30   bg-cyan-500/10   text-cyan-300',
   }
   return (
     <div

@@ -56,18 +56,18 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-navy-gradient flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo / branding */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-primary-600 rounded-xl mb-3">
-            <span className="text-white text-xl font-bold">I</span>
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-3 bg-gradient-to-br from-cyan-500 to-cyan-400 shadow-glow-cyan">
+            <span className="text-navy-950 text-xl font-bold">I</span>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">InnovatEPAM</h1>
-          <p className="text-sm text-gray-500 mt-1">Innovation Portal</p>
+          <h1 className="text-2xl font-bold text-slate-100">InnovatEPAM</h1>
+          <p className="text-sm text-slate-400 mt-1">Innovation Portal</p>
         </div>
 
-        <Card>
+        <Card className="border-navy-border/80 shadow-card-dark backdrop-blur-xl">
           <CardHeader className="space-y-1">
             <CardTitle className="text-xl">Create an account</CardTitle>
             <CardDescription>
@@ -144,12 +144,12 @@ export default function RegisterPage() {
             </form>
           </CardContent>
 
-          <CardFooter className="justify-center">
-            <p className="text-sm text-gray-500">
+          <CardFooter className="justify-center border-t border-navy-border/60 pt-4">
+            <p className="text-sm text-slate-400">
               Already have an account?{' '}
               <Link
                 to="/login"
-                className="font-medium text-primary-600 hover:text-primary-700 hover:underline"
+                className="font-medium text-cyan-400 hover:text-cyan-300 hover:underline transition-colors"
               >
                 Sign in
               </Link>

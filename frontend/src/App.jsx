@@ -6,6 +6,7 @@ import LoginPage    from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 
 // Protected pages
+import DashboardPage  from './pages/DashboardPage'
 import IdeasListPage   from './pages/IdeasListPage'
 import SubmitIdeaPage  from './pages/SubmitIdeaPage'
 import IdeaDetailPage  from './pages/IdeaDetailPage'
@@ -22,14 +23,15 @@ export default function App() {
 
         {/* Protected routes */}
         <Route element={<ProtectedRoute />}>
-          <Route index element={<Navigate to="/ideas" replace />} />
-          <Route path="/ideas"      element={<IdeasListPage />} />
-          <Route path="/ideas/new"  element={<SubmitIdeaPage />} />
-          <Route path="/ideas/:id"  element={<IdeaDetailPage />} />
+          <Route index             element={<DashboardPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/ideas"     element={<IdeasListPage />} />
+          <Route path="/ideas/new" element={<SubmitIdeaPage />} />
+          <Route path="/ideas/:id" element={<IdeaDetailPage />} />
         </Route>
 
         {/* Fallback */}
-        <Route path="*" element={<Navigate to="/ideas" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AuthProvider>
   )

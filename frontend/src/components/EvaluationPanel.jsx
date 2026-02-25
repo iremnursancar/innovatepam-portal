@@ -35,8 +35,8 @@ export default function EvaluationPanel({ idea, onEvaluated }) {
   }
 
   return (
-    <section className="mt-6 rounded-lg border border-gray-200 bg-gray-50 p-5">
-      <h2 className="text-base font-semibold text-gray-800 mb-4">
+    <section className="mt-6 rounded-lg border border-navy-border bg-navy-card/80 backdrop-blur-sm p-5 shadow-card-dark">
+      <h2 className="text-base font-semibold text-slate-200 mb-4">
         {isFinalized ? 'Evaluation' : 'Evaluate this Idea'}
       </h2>
 
@@ -44,17 +44,17 @@ export default function EvaluationPanel({ idea, onEvaluated }) {
       {isFinalized && existing ? (
         <div className="space-y-2 text-sm">
           <p>
-            <span className="font-medium text-gray-600">Decision: </span>
-            <span className={existing.decision === 'accepted' ? 'text-accent-600 font-semibold' : 'text-red-600 font-semibold'}>
+            <span className="font-medium text-slate-400">Decision: </span>
+            <span className={existing.decision === 'accepted' ? 'text-emerald-400 font-semibold' : 'text-rose-400 font-semibold'}>
               {existing.decision.charAt(0).toUpperCase() + existing.decision.slice(1)}
             </span>
           </p>
           <p>
-            <span className="font-medium text-gray-600">Comment: </span>
-            <span className="text-gray-800">{existing.comment}</span>
+            <span className="font-medium text-slate-400">Comment: </span>
+            <span className="text-slate-300">{existing.comment}</span>
           </p>
           {existing.admin_email && (
-            <p className="text-gray-500 text-xs">Evaluated by {existing.admin_email}</p>
+            <p className="text-slate-500 text-xs">Evaluated by {existing.admin_email}</p>
           )}
         </div>
       ) : (
@@ -62,7 +62,7 @@ export default function EvaluationPanel({ idea, onEvaluated }) {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Decision toggle */}
           <fieldset>
-            <legend className="text-sm font-medium text-gray-700 mb-2">Decision</legend>
+            <legend className="text-sm font-medium text-slate-300 mb-2">Decision</legend>
             <div className="flex gap-4">
               {['accepted', 'rejected'].map(opt => (
                 <label key={opt} className="flex items-center gap-2 cursor-pointer">
@@ -72,9 +72,9 @@ export default function EvaluationPanel({ idea, onEvaluated }) {
                     value={opt}
                     checked={decision === opt}
                     onChange={() => setDecision(opt)}
-                    className="accent-primary-600"
+                    className="accent-cyan-500"
                   />
-                  <span className={`text-sm font-medium ${opt === 'accepted' ? 'text-accent-600' : 'text-red-600'}`}>
+                  <span className={`text-sm font-medium ${opt === 'accepted' ? 'text-emerald-400' : 'text-rose-400'}`}>
                     {opt.charAt(0).toUpperCase() + opt.slice(1)}
                   </span>
                 </label>
@@ -84,8 +84,8 @@ export default function EvaluationPanel({ idea, onEvaluated }) {
 
           {/* Comment */}
           <div>
-            <label htmlFor="eval-comment" className="block text-sm font-medium text-gray-700 mb-1">
-              Comment <span className="text-red-500">*</span>
+            <label htmlFor="eval-comment" className="block text-sm font-medium text-slate-300 mb-1">
+              Comment <span className="text-rose-400">*</span>
             </label>
             <textarea
               id="eval-comment"
@@ -93,16 +93,16 @@ export default function EvaluationPanel({ idea, onEvaluated }) {
               value={comment}
               onChange={e => setComment(e.target.value)}
               placeholder="Explain your decision…"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+              className="w-full rounded-md border border-navy-border bg-navy-950/60 px-3 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-colors"
             />
           </div>
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && <p className="text-sm text-rose-400">{error}</p>}
 
           <button
             type="submit"
             disabled={loading}
-            className="inline-flex items-center gap-2 rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50 transition-colors"
+            className="inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-cyan-500 to-cyan-400 text-navy-950 font-semibold px-4 py-2 text-sm hover:from-cyan-400 hover:to-cyan-300 shadow-glow-cyan disabled:opacity-50 transition-all"
           >
             {loading ? 'Submitting…' : 'Submit Evaluation'}
           </button>

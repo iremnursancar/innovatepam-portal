@@ -1,123 +1,103 @@
-import { useNavigate } from 'react-router-dom'
-import { useAuth }     from '../context/AuthContext'
-import { Button }      from '../components/ui/button'
+import { Link } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import {
   Card, CardHeader, CardTitle, CardContent,
 } from '../components/ui/card'
-import { LogOut, Lightbulb, Users } from 'lucide-react'
-
-/** Role badge rendered next to the user's name */
-function RoleBadge({ role }) {
-  const isAdmin = role === 'admin'
-  return (
-    <span
-      className={[
-        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold',
-        isAdmin
-          ? 'bg-accent-100 text-accent-800'
-          : 'bg-primary-100 text-primary-800',
-      ].join(' ')}
-      aria-label={`Role: ${role}`}
-    >
-      {isAdmin ? 'Admin' : 'Submitter'}
-    </span>
-  )
-}
+import { Lightbulb, PlusCircle, ClipboardList } from 'lucide-react'
+import Navbar        from '../components/Navbar'
+import ActivityFeed  from '../components/ActivityFeed'
+import StatisticsPanel from '../components/StatisticsPanel'
 
 export default function DashboardPage() {
-  const { user, logout } = useAuth()
-  const navigate         = useNavigate()
-
-  async function handleLogout() {
-    await logout()
-    navigate('/login', { replace: true })
-  }
+  const { user } = useAuth()
+  const isAdmin  = user?.role === 'admin'
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      {/* Nav bar */}
-      <header className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-              <span className="text-white text-sm font-bold">I</span>
-            </div>
-            <span className="text-lg font-semibold text-gray-900">InnovatEPAM</span>
-          </div>
+    <div className="min-h-screen">
+      <Navbar />
 
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <span>{user?.email}</span>
-              <RoleBadge role={user?.role} />
-            </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleLogout}
-              className="flex items-center gap-1.5"
-              aria-label="Log out"
-            >
-              <LogOut className="h-4 w-4" aria-hidden="true" />
-              Log out
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      {/* Main content */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
         {/* Welcome banner */}
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-slate-100">
             Welcome back{user?.email ? `, ${user.email.split('@')[0]}` : ''}!
-          </h2>
-          <p className="mt-1 text-gray-500">
-            {user?.role === 'admin'
-              ? "You're signed in as an administrator. Review and evaluate submitted ideas below."
-              : "Share your ideas and track their progress from submission to decision."}
+          </h1>
+          <p className="mt-1 text-slate-400">
+            {isAdmin
+              ? "You're signed in as an administrator. Review ideas and track all activity."
+              : 'Share your ideas and track their progress from submission to decision.'}
           </p>
         </div>
 
         {/* Quick-action cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <Card className="hover:shadow-md transition-shadow cursor-pointer group border-blue-100">
-            <CardHeader>
-              <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center mb-2 group-hover:bg-primary-200 transition-colors">
-                <Lightbulb className="h-5 w-5 text-primary-600" aria-hidden="true" />
-              </div>
-              <CardTitle className="text-base">Ideas</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-gray-500">
-                {user?.role === 'admin'
-                  ? 'Review all submitted ideas and record evaluations.'
-                  : 'Browse your submitted ideas and check their status.'}
-              </p>
-              <p className="mt-3 text-xs text-gray-400 italic">
-                Available in Phase 4 (US2 + US3)
-              </p>
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
 
-          {user?.role === 'admin' && (
-            <Card className="hover:shadow-md transition-shadow cursor-pointer group border-accent-100">
+          {/* Browse Ideas */}
+          <Link to="/ideas" className="group block focus:outline-none">
+            <Card className="h-full hover:border-cyan-500/40 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300 group-focus-visible:ring-2 group-focus-visible:ring-cyan-500/50">
               <CardHeader>
-                <div className="w-10 h-10 bg-accent-100 rounded-lg flex items-center justify-center mb-2 group-hover:bg-accent-200 transition-colors">
-                  <Users className="h-5 w-5 text-accent-600" aria-hidden="true" />
+                <div className="w-10 h-10 bg-cyan-500/10 border border-cyan-500/20 rounded-lg flex items-center justify-center mb-2 group-hover:bg-cyan-500/20 transition-colors">
+                  <ClipboardList className="h-5 w-5 text-cyan-400" aria-hidden="true" />
                 </div>
-                <CardTitle className="text-base">Evaluations</CardTitle>
+                <CardTitle className="text-base">Browse Ideas</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-gray-500">
-                  Accept or reject ideas with a mandatory comment.
-                </p>
-                <p className="mt-3 text-xs text-gray-400 italic">
-                  Available in Phase 6 (US4)
+                <p className="text-sm text-slate-400">
+                  {isAdmin
+                    ? 'View all submitted ideas and record evaluations.'
+                    : 'See your submitted ideas and check their status.'}
                 </p>
               </CardContent>
             </Card>
+          </Link>
+
+          {/* Submit New Idea */}
+          <Link to="/ideas/new" className="group block focus:outline-none">
+            <Card className="h-full hover:border-emerald-500/40 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] transition-all duration-300 group-focus-visible:ring-2 group-focus-visible:ring-emerald-500/50">
+              <CardHeader>
+                <div className="w-10 h-10 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center justify-center mb-2 group-hover:bg-emerald-500/20 transition-colors">
+                  <PlusCircle className="h-5 w-5 text-emerald-400" aria-hidden="true" />
+                </div>
+                <CardTitle className="text-base">Submit New Idea</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-slate-400">
+                  Got an idea? Submit it for review and track its progress.
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          {/* Admin: quick view of idea backlog */}
+          {isAdmin && (
+            <Link to="/ideas" className="group block focus:outline-none">
+              <Card className="h-full hover:border-violet-500/40 hover:shadow-[0_0_30px_rgba(139,92,246,0.15)] transition-all duration-300 group-focus-visible:ring-2 group-focus-visible:ring-violet-500/50">
+                <CardHeader>
+                  <div className="w-10 h-10 bg-violet-500/10 border border-violet-500/20 rounded-lg flex items-center justify-center mb-2 group-hover:bg-violet-500/20 transition-colors">
+                    <Lightbulb className="h-5 w-5 text-violet-400" aria-hidden="true" />
+                  </div>
+                  <CardTitle className="text-base">Evaluate Ideas</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-slate-400">
+                    Accept or reject ideas with a mandatory comment.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
           )}
+
         </div>
+
+        {/* Statistics — admin only */}
+        {isAdmin && (
+          <div className="mb-8">
+            <StatisticsPanel />
+          </div>
+        )}
+
+        {/* Activity Feed */}
+        <ActivityFeed />
       </main>
     </div>
   )

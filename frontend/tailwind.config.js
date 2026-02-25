@@ -8,20 +8,22 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Primary: Cyan
         primary: {
-          DEFAULT: '#2563eb',
-          50:  '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
-          950: '#172554',
+          DEFAULT: '#06b6d4',
+          50:  '#ecfeff',
+          100: '#cffafe',
+          200: '#a5f3fc',
+          300: '#67e8f9',
+          400: '#22d3ee',
+          500: '#06b6d4',
+          600: '#0891b2',
+          700: '#0e7490',
+          800: '#155e75',
+          900: '#164e63',
+          950: '#083344',
         },
+        // Accent: Emerald
         accent: {
           DEFAULT: '#10b981',
           50:  '#ecfdf5',
@@ -36,11 +38,32 @@ export default {
           900: '#064e3b',
           950: '#022c22',
         },
+        // Dark Navy palette
+        navy: {
+          950: '#0a1929',
+          900: '#0d2137',
+          800: '#132f4c',
+          700: '#1a3a57',
+          600: '#1e4976',
+          card: '#1a2332',
+          border: '#2d3748',
+        },
       },
       borderRadius: {
         lg: '0.5rem',
         md: '0.375rem',
         sm: '0.25rem',
+      },
+      boxShadow: {
+        'glow-cyan':    '0 0 20px rgba(6,182,212,0.25)',
+        'glow-emerald': '0 0 20px rgba(16,185,129,0.25)',
+        'glow-blue':    '0 0 16px rgba(59,130,246,0.3)',
+        'glow-amber':   '0 0 16px rgba(245,158,11,0.3)',
+        'card-dark':    '0 4px 24px rgba(0,0,0,0.4)',
+        'card-hover':   '0 8px 32px rgba(0,0,0,0.5)',
+      },
+      backgroundImage: {
+        'navy-gradient': 'linear-gradient(135deg, #0a1929 0%, #132f4c 100%)',
       },
     },
   },
