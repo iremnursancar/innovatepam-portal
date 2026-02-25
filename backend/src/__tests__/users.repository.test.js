@@ -98,17 +98,15 @@ describe('findByEmail', () => {
     expect(user.password).toBe('hashed_pw')
   })
 
-  test('returns null for an email that does not exist', () => {
-    // node-sqlite3-wasm returns null (not undefined) for no-row result
+  test('returns undefined for an email that does not exist', () => {
     const result = findByEmail('ghost@example.com')
-    expect(result).toBeNull()
+    expect(result).toBeUndefined()
   })
 
   test('is case-sensitive (stores what was inserted)', () => {
     createUser({ email: 'mixed@example.com', password: 'pw' })
     // The service lower-cases before storing; repository is just a data accessor
-    // node-sqlite3-wasm returns null (not undefined) for no-row results
-    expect(findByEmail('MIXED@example.com')).toBeNull()
+    expect(findByEmail('MIXED@example.com')).toBeUndefined()
     expect(findByEmail('mixed@example.com')).toBeDefined()
   })
 })
@@ -132,8 +130,7 @@ describe('findById', () => {
     expect(user.password).toBeUndefined()
   })
 
-  test('returns null for a non-existent id', () => {
-    // node-sqlite3-wasm returns null (not undefined) for no-row results
-    expect(findById(99999)).toBeNull()
+  test('returns undefined for a non-existent id', () => {
+    expect(findById(99999)).toBeUndefined()
   })
 })

@@ -3,7 +3,7 @@
 const { Router } = require('express')
 const { register, login } = require('../services/authService')
 const authenticate = require('../middleware/authenticate')
-const { findById } = require('../repositories/userRepository')
+const { findById, updateUserRole } = require('../repositories/userRepository')
 
 const router = Router()
 
@@ -51,6 +51,23 @@ router.post('/login', async (req, res, next) => {
 router.post('/logout', (_req, res) => {
   res.clearCookie('token', { httpOnly: true, sameSite: 'lax' })
   return res.json({ message: 'Logged out successfully.' })
+})
+
+/**
+ * POST /api/auth/make-admin  (TEMPORARY - setup only, no auth required)
+ * Body: { email: string }
+ * Promotes the given user to the 'admin' role.
+ */
+router.post('/make-admin', (req, res) => {
+  const { email } = req.body
+  if (!email) {
+    return res.status(400).json({ error: 'email is required.' })
+  }
+  const user = updateUserRole(email, 'admin')
+  if (!user) {
+    return res.status(404).json({ error: 'User not found.' })
+  }
+  return res.json({ message: `User ${email} promoted to admin.`, user })
 })
 
 /**

@@ -31,10 +31,15 @@ app.use('/uploads', express.static(config.UPLOADS_PATH))
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }))
 
 // ── Route mounting ────────────────────────────────────────────────────────────
-const authRoutes = require('./routes/auth')
-app.use('/api/auth', authRoutes)
-// Ideas routes → T030
-// Evaluations routes → T043
+const authRoutes        = require('./routes/auth')
+const ideasRoutes       = require('./routes/ideas')
+const evaluationsRoutes = require('./routes/evaluations')
+const attachmentsRoutes = require('./routes/attachments')
+
+app.use('/api/auth',        authRoutes)
+app.use('/api/ideas',       ideasRoutes)
+app.use('/api/evaluations', evaluationsRoutes)
+app.use('/api/attachments', attachmentsRoutes)
 
 // ── 404 handler ──────────────────────────────────────────────────────────────
 app.use((_req, res) => {

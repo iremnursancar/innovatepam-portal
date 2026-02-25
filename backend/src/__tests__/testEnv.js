@@ -3,8 +3,8 @@
  * Runs before the test framework is installed (Jest `setupFiles`).
  * Overrides common environment variables used by every test file.
  * DB_PATH is intentionally omitted here — each test file sets its own
- * unique path (before requiring any app module) to avoid cross-file
- * SQLite file-locking with node-sqlite3-wasm.
+ * unique path (before requiring any app module) to keep test databases
+ * isolated from each other.
  */
 process.env.NODE_ENV = 'test'
 process.env.JWT_SECRET = 'test_jwt_secret_minimum_32_chars!!'

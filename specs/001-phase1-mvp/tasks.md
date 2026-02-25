@@ -87,14 +87,14 @@
 
 ### Implementation for User Story 2
 
-- [ ] T026 [P] [US2] Create Idea repository with `createIdea`, `findById`, `findBySubmitter`, `findAll`, `updateStatus` methods in `backend/src/repositories/ideaRepository.js`
-- [ ] T027 [P] [US2] Create Attachment repository with `createAttachment`, `findByIdeaId` methods in `backend/src/repositories/attachmentRepository.js`
-- [ ] T028 [US2] Implement IdeaService `submitIdea(submitterId, fields, file)` method: validate category against allowlist, persist idea with status "Submitted", persist attachment record if file present in `backend/src/services/ideaService.js`  depends on T026, T027
-- [ ] T029 [US2] Implement `POST /api/ideas` route: authenticate middleware  upload middleware (T009)  requireRole not needed (any authenticated user)  call IdeaService  return 201 in `backend/src/routes/ideas.js`  depends on T028, T007, T009
-- [ ] T030 [US2] Mount ideas router on `/api/ideas` in `backend/src/app.js`
-- [ ] T031 [P] [US2] Implement ideas API client with `submitIdea(formData)` in `frontend/src/api/ideasApi.js`  depends on T014
-- [ ] T032 [US2] Build SubmitIdeaPage: controlled form (title, description, category select, file input with client-side size/type check), submission handling, success redirect to ideas list in `frontend/src/pages/SubmitIdeaPage.jsx`  depends on T031, T023
-- [ ] T033 [US2] Add SubmitIdeaPage route `/ideas/new` (protected, submitter-visible) in `frontend/src/App.jsx`
+- [x] T026 [P] [US2] Create Idea repository with `createIdea`, `findById`, `findBySubmitter`, `findAll`, `updateStatus` methods in `backend/src/repositories/ideaRepository.js`
+- [x] T027 [P] [US2] Create Attachment repository with `createAttachment`, `findByIdeaId` methods in `backend/src/repositories/attachmentRepository.js`
+- [x] T028 [US2] Implement IdeaService `submitIdea(submitterId, fields, file)` method: validate category against allowlist, persist idea with status "Submitted", persist attachment record if file present in `backend/src/services/ideaService.js`  depends on T026, T027
+- [x] T029 [US2] Implement `POST /api/ideas` route: authenticate middleware  upload middleware (T009)  requireRole not needed (any authenticated user)  call IdeaService  return 201 in `backend/src/routes/ideas.js`  depends on T028, T007, T009
+- [x] T030 [US2] Mount ideas router on `/api/ideas` in `backend/src/app.js`
+- [x] T031 [P] [US2] Implement ideas API client with `submitIdea(formData)` in `frontend/src/api/ideasApi.js`  depends on T014
+- [x] T032 [US2] Build SubmitIdeaPage: controlled form (title, description, category select, file input with client-side size/type check), submission handling, success redirect to ideas list in `frontend/src/pages/SubmitIdeaPage.jsx`  depends on T031, T023
+- [x] T033 [US2] Add SubmitIdeaPage route `/ideas/new` (protected, submitter-visible) in `frontend/src/App.jsx`
 
 **Checkpoint**: Submitter can POST a multipart idea with file  201 with attachment. File exceeding 10 MB returns 400. Disallowed MIME type returns 400. Missing required field returns 400.
 
@@ -108,12 +108,12 @@
 
 ### Implementation for User Story 3
 
-- [ ] T034 [US3] Implement IdeaService `listIdeas(requestingUser)` (role-conditional query) and `getIdeaDetail(ideaId, requestingUser)` (include attachment + evaluation if present) in `backend/src/services/ideaService.js`  depends on T026, T027
-- [ ] T035 [US3] Implement `GET /api/ideas` (role-filtered list) and `GET /api/ideas/:id` (detail with attachment + evaluation) routes in `backend/src/routes/ideas.js`  depends on T034, T007
-- [ ] T036 [P] [US3] Extend ideas API client with `listIdeas()` and `getIdea(id)` in `frontend/src/api/ideasApi.js`  depends on T014
-- [ ] T037 [US3] Build IdeasListPage: fetch and render idea rows (title, category, date, status badge), "New Idea" button for submitters, row click navigates to detail in `frontend/src/pages/IdeasListPage.jsx`  depends on T036, T020, T023
-- [ ] T038 [US3] Build IdeaDetailPage: render idea fields, attachment download link, evaluation result section (read-only for submitters) in `frontend/src/pages/IdeaDetailPage.jsx`  depends on T036, T020
-- [ ] T039 [US3] Add route `/ideas` (protected list) and `/ideas/:id` (protected detail) in `frontend/src/App.jsx`; set `/ideas` as default authenticated landing page
+- [x] T034 [US3] Implement IdeaService `listIdeas(requestingUser)` (role-conditional query) and `getIdeaDetail(ideaId, requestingUser)` (include attachment + evaluation if present) in `backend/src/services/ideaService.js`  depends on T026, T027
+- [x] T035 [US3] Implement `GET /api/ideas` (role-filtered list) and `GET /api/ideas/:id` (detail with attachment + evaluation) routes in `backend/src/routes/ideas.js`  depends on T034, T007
+- [x] T036 [P] [US3] Extend ideas API client with `listIdeas()` and `getIdea(id)` in `frontend/src/api/ideasApi.js`  depends on T014
+- [x] T037 [US3] Build IdeasListPage: fetch and render idea rows (title, category, date, status badge), "New Idea" button for submitters, row click navigates to detail in `frontend/src/pages/IdeasListPage.jsx`  depends on T036, T020, T023
+- [x] T038 [US3] Build IdeaDetailPage: render idea fields, attachment download link, evaluation result section (read-only for submitters) in `frontend/src/pages/IdeaDetailPage.jsx`  depends on T036, T020
+- [x] T039 [US3] Add route `/ideas` (protected list) and `/ideas/:id` (protected detail) in `frontend/src/App.jsx`; set `/ideas` as default authenticated landing page
 
 **Checkpoint**: Submitter sees only own ideas in list. Admin sees all. Status badges reflect current state. Unauthenticated GET returns 401.
 
@@ -127,13 +127,13 @@
 
 ### Implementation for User Story 4
 
-- [ ] T040 [P] [US4] Create Evaluation repository with `upsertEvaluation(ideaId, adminId, decision, comment)` and `findByIdeaId(ideaId)` in `backend/src/repositories/evaluationRepository.js`
-- [ ] T041 [US4] Implement EvaluationService `evaluate(ideaId, admin, decision, comment)` (validate decision enum, upsert evaluation, update idea status) in `backend/src/services/evaluationService.js`  depends on T040, T026
-- [ ] T042 [US4] Implement evaluation routes: `PATCH /api/ideas/:id/status` (admin only, status: under_review) and `POST /api/evaluations` (admin only: accepted/rejected + comment) in `backend/src/routes/evaluations.js`  depends on T041, T007, T008
-- [ ] T043 [US4] Mount evaluations router and wire status-update sub-route for ideas in `backend/src/app.js`
-- [ ] T044 [P] [US4] Implement evaluations API client with `setUnderReview(ideaId)` and `submitEvaluation(ideaId, decision, comment)` in `frontend/src/api/evaluationsApi.js`  depends on T014
-- [ ] T045 [US4] Build EvaluationPanel component (admin-only, visible on IdeaDetailPage): status action buttons, decision radio (Accept/Reject), comment textarea (required), submit handler in `frontend/src/components/EvaluationPanel.jsx`  depends on T044, T024
-- [ ] T046 [US4] Integrate EvaluationPanel into IdeaDetailPage with AdminRoute guard; show read-only evaluation result to submitters in `frontend/src/pages/IdeaDetailPage.jsx`  depends on T045, T038
+- [x] T040 [P] [US4] Create Evaluation repository with `upsertEvaluation(ideaId, adminId, decision, comment)` and `findByIdeaId(ideaId)` in `backend/src/repositories/evaluationRepository.js`
+- [x] T041 [US4] Implement EvaluationService `evaluate(ideaId, admin, decision, comment)` (validate decision enum, upsert evaluation, update idea status) in `backend/src/services/evaluationService.js`  depends on T040, T026
+- [x] T042 [US4] Implement evaluation routes: `PATCH /api/ideas/:id/status` (admin only, status: under_review) and `POST /api/evaluations` (admin only: accepted/rejected + comment) in `backend/src/routes/evaluations.js`  depends on T041, T007, T008
+- [x] T043 [US4] Mount evaluations router and wire status-update sub-route for ideas in `backend/src/app.js`
+- [x] T044 [P] [US4] Implement evaluations API client with `setUnderReview(ideaId)` and `submitEvaluation(ideaId, decision, comment)` in `frontend/src/api/evaluationsApi.js`  depends on T014
+- [x] T045 [US4] Build EvaluationPanel component (admin-only, visible on IdeaDetailPage): status action buttons, decision radio (Accept/Reject), comment textarea (required), submit handler in `frontend/src/components/EvaluationPanel.jsx`  depends on T044, T024
+- [x] T046 [US4] Integrate EvaluationPanel into IdeaDetailPage with AdminRoute guard; show read-only evaluation result to submitters in `frontend/src/pages/IdeaDetailPage.jsx`  depends on T045, T038
 
 **Checkpoint**: Admin can accept/reject with comment  status updates. Submitter attempting evaluation  403. Missing comment  400. Existing evaluation is replaced on re-evaluation.
 
@@ -143,12 +143,12 @@
 
 **Purpose**: Wiring loose ends, consistent UX, and production-readiness for the MVP demo.
 
-- [ ] T047 Add centralized error handler middleware that returns `{error: message}` JSON for all Express errors (400/401/403/404/500) in `backend/src/middleware/errorHandler.js`  ensure mounted last in `backend/src/app.js`
-- [ ] T048 [P] Add input validation for all backend routes: required fields, email format (FR-001/002), category enum (FR-008), decision enum (FR-018), comment required (FR-018)  inline validation or via a `validate.js` util in `backend/src/utils/validate.js`
-- [ ] T049 [P] Build shared Navbar component with nav links (Ideas, Submit Idea), user name + role display, and Logout button in `frontend/src/components/Navbar.jsx`  depends on T020
-- [ ] T050 [P] Add status badge component with color-coded labels (Submitted=blue, Under Review=yellow, Accepted=green, Rejected=red) in `frontend/src/components/StatusBadge.jsx`
-- [ ] T051 [P] Add attachment download endpoint `GET /api/attachments/:id/download` that streams the file with correct Content-Disposition header in `backend/src/routes/attachments.js`; mount in `backend/src/app.js`
-- [ ] T052 Write root-level `README.md` developer quickstart: prerequisites, environment setup steps, `npm install` + `npm run dev` commands for both backend and frontend, seed admin user instructions
+- [x] T047 Add centralized error handler middleware that returns `{error: message}` JSON for all Express errors (400/401/403/404/500) in `backend/src/middleware/errorHandler.js`  ensure mounted last in `backend/src/app.js`
+- [x] T048 [P] Add input validation for all backend routes: required fields, email format (FR-001/002), category enum (FR-008), decision enum (FR-018), comment required (FR-018)  inline validation or via a `validate.js` util in `backend/src/utils/validate.js`
+- [x] T049 [P] Build shared Navbar component with nav links (Ideas, Submit Idea), user name + role display, and Logout button in `frontend/src/components/Navbar.jsx`  depends on T020
+- [x] T050 [P] Add status badge component with color-coded labels (Submitted=blue, Under Review=yellow, Accepted=green, Rejected=red) in `frontend/src/components/StatusBadge.jsx`
+- [x] T051 [P] Add attachment download endpoint `GET /api/attachments/:id/download` that streams the file with correct Content-Disposition header in `backend/src/routes/attachments.js`; mount in `backend/src/app.js`
+- [x] T052 Write root-level `README.md` developer quickstart: prerequisites, environment setup steps, `npm install` + `npm run dev` commands for both backend and frontend, seed admin user instructions
 
 **Checkpoint**: Full end-to-end workflow  register  login  submit idea with attachment  admin evaluates  status updated  runs without errors in a single browser session.
 

@@ -1,6 +1,6 @@
 'use strict'
 
-const { Database } = require('node-sqlite3-wasm')
+const { DatabaseSync } = require('node:sqlite')
 const path = require('path')
 const fs = require('fs')
 const config = require('../config')
@@ -10,7 +10,8 @@ let db
 /**
  * Returns the shared SQLite database connection.
  * Initialises it with WAL mode on first call.
- * @returns {import('node-sqlite3-wasm').Database}
+ * Uses the built-in node:sqlite module (Node.js 22.5+, stable in Node.js 24).
+ * @returns {DatabaseSync}
  */
 function getDb() {
   if (!db) {
@@ -19,12 +20,9 @@ function getDb() {
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true })
     }
-    db = new Database(config.DB_PATH)
-    // WAL mode improves concurrent reads in production.
-    // Skip it in tests to avoid file-lock issues with node-sqlite3-wasm.
-    if (process.env.NODE_ENV !== 'test') {
-      db.exec('PRAGMA journal_mode = WAL')
-    }
+    db = new DatabaseSync(config.DB_PATH)
+    // WAL mode improves concurrent reads; node:sqlite handles this reliably.
+    db.exec('PRAGMA journal_mode = WAL')
     db.exec('PRAGMA foreign_keys = ON')
   }
   return db

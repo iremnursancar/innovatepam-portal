@@ -8,7 +8,7 @@ const { getDb } = require('../db/database')
  * @returns {{ id, email, password, role, created_at } | undefined}
  */
 function findByEmail(email) {
-  return getDb().prepare('SELECT * FROM users WHERE email = ?').get([email])
+  return getDb().prepare('SELECT * FROM users WHERE email = ?').get(email)
 }
 
 /**
@@ -19,7 +19,7 @@ function findByEmail(email) {
 function findById(id) {
   return getDb()
     .prepare('SELECT id, email, role, created_at FROM users WHERE id = ?')
-    .get([id])
+    .get(id)
 }
 
 /**
@@ -32,8 +32,20 @@ function createUser({ email, password, role = 'submitter' }) {
   const stmt = db.prepare(
     'INSERT INTO users (email, password, role) VALUES (?, ?, ?)'
   )
-  const result = stmt.run([email, password, role])
+  const result = stmt.run(email, password, role)
   return findById(result.lastInsertRowid)
 }
 
-module.exports = { findByEmail, findById, createUser }
+/**
+ * Updates the role of a user identified by email.
+ * @param {string} email
+ * @param {string} role
+ * @returns {{ id: number, email: string, role: string, created_at: string } | undefined}
+ */
+function updateUserRole(email, role) {
+  const db = getDb()
+  db.prepare('UPDATE users SET role = ? WHERE email = ?').run(role, email)
+  return findByEmail(email)
+}
+
+module.exports = { findByEmail, findById, createUser, updateUserRole }

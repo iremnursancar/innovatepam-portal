@@ -22,7 +22,7 @@ function runMigrations() {
   `)
 
   const applied = new Set(
-    db.prepare('SELECT version FROM schema_migrations').all([]).map(r => r.version)
+    db.prepare('SELECT version FROM schema_migrations').all().map(r => r.version)
   )
 
   const files = fs
@@ -36,7 +36,7 @@ function runMigrations() {
 
     const sql = fs.readFileSync(path.join(MIGRATIONS_DIR, file), 'utf8')
     db.exec(sql)
-    db.prepare('INSERT INTO schema_migrations (version) VALUES (?)').run([version])
+    db.prepare('INSERT INTO schema_migrations (version) VALUES (?)').run(version)
     console.log(`[migrate] Applied migration: ${file}`)
   }
 
