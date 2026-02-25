@@ -25,9 +25,9 @@
 
 **Purpose**: Initialize both projects, install all dependencies, establish repo structure.
 
-- [ ] T001 Initialize backend Node.js project: create `backend/` directory, run `npm init`, install express, better-sqlite3, bcryptjs, jsonwebtoken, cookie-parser, cors, multer, dotenv  create `backend/package.json`
-- [ ] T002 Initialize frontend Vite + React project: run `npm create vite@latest frontend -- --template react`, install react-router-dom, axios  create `frontend/package.json`
-- [ ] T003 [P] Create directory structure: `backend/src/{db,repositories,services,routes,middleware,utils}`, `backend/uploads/`, `frontend/src/{api,context,components,pages}`  create all directories with `.gitkeep` where needed
+- [x] T001 Initialize backend Node.js project: create `backend/` directory, run `npm init`, install express, better-sqlite3, bcryptjs, jsonwebtoken, cookie-parser, cors, multer, dotenv  create `backend/package.json`
+- [x] T002 Initialize frontend Vite + React project: run `npm create vite@latest frontend -- --template react`, install react-router-dom, axios  create `frontend/package.json`
+- [x] T003 [P] Create directory structure: `backend/src/{db,repositories,services,routes,middleware,utils}`, `backend/uploads/`, `frontend/src/{api,context,components,pages}`  create all directories with `.gitkeep` where needed
 
 **Checkpoint**: Both projects initialize with `npm install` without errors
 
@@ -39,17 +39,17 @@
 
 ** CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T004 Create SQLite database module with connection and WAL mode config in `backend/src/db/database.js`
-- [ ] T005 Create database schema migration runner and initial schema (users, ideas, attachments, evaluations tables) in `backend/src/db/migrations/001_initial_schema.sql` and `backend/src/db/migrate.js`
-- [ ] T006 [P] Create JWT utility with `signToken(payload)` and `verifyToken(token)` helpers in `backend/src/utils/jwt.js`
-- [ ] T007 [P] Create authentication middleware that reads JWT from httpOnly cookie and attaches `req.user` in `backend/src/middleware/authenticate.js`
-- [ ] T008 [P] Create role-guard middleware factory `requireRole(role)` for admin-only route protection in `backend/src/middleware/requireRole.js`
-- [ ] T009 [P] Create Multer upload middleware: MIME-type allowlist (PDF, DOCX, PNG, JPG, XLSX), 10 MB size limit, `uploads/` destination in `backend/src/middleware/upload.js`
-- [ ] T010 Configure Express app with CORS (localhost:5173), cookie-parser, JSON body parser, static file serving for `uploads/`, and global error handler in `backend/src/app.js` and `backend/src/middleware/errorHandler.js`
-- [ ] T011 [P] Create app entry point with server start and DB migration invocation in `backend/src/server.js`
-- [ ] T012 [P] Create environment config loader with required-variable validation in `backend/src/config.js`; create `backend/.env.example` with JWT_SECRET, PORT, DB_PATH, UPLOADS_PATH
-- [ ] T013 [P] Bootstrap React app with React Router `<BrowserRouter>`, AuthContext provider shell, and placeholder routes in `frontend/src/main.jsx` and `frontend/src/App.jsx`
-- [ ] T014 [P] Create base Axios instance with `withCredentials: true` and base URL config in `frontend/src/api/apiClient.js`; create `frontend/.env.example` with VITE_API_BASE_URL
+- [x] T004 Create SQLite database module with connection and WAL mode config in `backend/src/db/database.js`
+- [x] T005 Create database schema migration runner and initial schema (users, ideas, attachments, evaluations tables) in `backend/src/db/migrations/001_initial_schema.sql` and `backend/src/db/migrate.js`
+- [x] T006 [P] Create JWT utility with `signToken(payload)` and `verifyToken(token)` helpers in `backend/src/utils/jwt.js`
+- [x] T007 [P] Create authentication middleware that reads JWT from httpOnly cookie and attaches `req.user` in `backend/src/middleware/authenticate.js`
+- [x] T008 [P] Create role-guard middleware factory `requireRole(role)` for admin-only route protection in `backend/src/middleware/requireRole.js`
+- [x] T009 [P] Create Multer upload middleware: MIME-type allowlist (PDF, DOCX, PNG, JPG, XLSX), 10 MB size limit, `uploads/` destination in `backend/src/middleware/upload.js`
+- [x] T010 Configure Express app with CORS (localhost:5173), cookie-parser, JSON body parser, static file serving for `uploads/`, and global error handler in `backend/src/app.js` and `backend/src/middleware/errorHandler.js`
+- [x] T011 [P] Create app entry point with server start and DB migration invocation in `backend/src/server.js`
+- [x] T012 [P] Create environment config loader with required-variable validation in `backend/src/config.js`; create `backend/.env.example` with JWT_SECRET, PORT, DB_PATH, UPLOADS_PATH
+- [x] T013 [P] Bootstrap React app with React Router `<BrowserRouter>`, AuthContext provider shell, and placeholder routes in `frontend/src/main.jsx` and `frontend/src/App.jsx`
+- [x] T014 [P] Create base Axios instance with `withCredentials: true` and base URL config in `frontend/src/api/apiClient.js`; create `frontend/.env.example` with VITE_API_BASE_URL
 
 **Checkpoint**: `node src/server.js` starts without error; `npm run dev` starts frontend; DB file created with all four tables
 
@@ -63,17 +63,17 @@
 
 ### Implementation for User Story 1
 
-- [ ] T015 [P] [US1] Create User repository with `createUser`, `findByEmail`, `findById` methods in `backend/src/repositories/userRepository.js`
-- [ ] T016 [US1] Implement AuthService with `register(email, password)` (bcrypt hash, role=submitter default) and `login(email, password)` (bcrypt compare, sign JWT) in `backend/src/services/authService.js`  depends on T015, T006
-- [ ] T017 [US1] Implement auth routes: `POST /api/auth/register`, `POST /api/auth/login` (set httpOnly cookie), `POST /api/auth/logout` (clear cookie), `GET /api/auth/me` (requires authenticate middleware) in `backend/src/routes/auth.js`  depends on T016, T007
-- [ ] T018 [US1] Mount auth router on `/api/auth` in `backend/src/app.js`
-- [ ] T019 [P] [US1] Implement auth API client with `register(email, password)`, `login(email, password)`, `logout()`, `getMe()` in `frontend/src/api/authApi.js`  depends on T014
-- [ ] T020 [US1] Implement AuthContext with `user`, `login()`, `logout()`, `register()` state and methods; persist auth state via `getMe()` on app load in `frontend/src/context/AuthContext.jsx`  depends on T019
-- [ ] T021 [P] [US1] Build RegisterPage form (email, password, confirm password) with validation and error display in `frontend/src/pages/RegisterPage.jsx`  depends on T020
-- [ ] T022 [P] [US1] Build LoginPage form (email, password) with error display and redirect-on-success in `frontend/src/pages/LoginPage.jsx`  depends on T020
-- [ ] T023 [US1] Build ProtectedRoute component that redirects unauthenticated users to `/login` in `frontend/src/components/ProtectedRoute.jsx`  depends on T020
-- [ ] T024 [US1] Build AdminRoute component that redirects non-admin users to ideas list in `frontend/src/components/AdminRoute.jsx`  depends on T020
-- [ ] T025 [US1] Wire all auth routes in `frontend/src/App.jsx`: `/register`, `/login`, `/` (protected)  depends on T021, T022, T023
+- [x] T015 [P] [US1] Create User repository with `createUser`, `findByEmail`, `findById` methods in `backend/src/repositories/userRepository.js`
+- [x] T016 [US1] Implement AuthService with `register(email, password)` (bcrypt hash, role=submitter default) and `login(email, password)` (bcrypt compare, sign JWT) in `backend/src/services/authService.js`  depends on T015, T006
+- [x] T017 [US1] Implement auth routes: `POST /api/auth/register`, `POST /api/auth/login` (set httpOnly cookie), `POST /api/auth/logout` (clear cookie), `GET /api/auth/me` (requires authenticate middleware) in `backend/src/routes/auth.js`  depends on T016, T007
+- [x] T018 [US1] Mount auth router on `/api/auth` in `backend/src/app.js`
+- [x] T019 [P] [US1] Implement auth API client with `register(email, password)`, `login(email, password)`, `logout()`, `getMe()` in `frontend/src/api/authApi.js`  depends on T014
+- [x] T020 [US1] Implement AuthContext with `user`, `login()`, `logout()`, `register()` state and methods; persist auth state via `getMe()` on app load in `frontend/src/context/AuthContext.jsx`  depends on T019
+- [x] T021 [P] [US1] Build RegisterPage form (email, password, confirm password) with validation and error display in `frontend/src/pages/RegisterPage.jsx`  depends on T020
+- [x] T022 [P] [US1] Build LoginPage form (email, password) with error display and redirect-on-success in `frontend/src/pages/LoginPage.jsx`  depends on T020
+- [x] T023 [US1] Build ProtectedRoute component that redirects unauthenticated users to `/login` in `frontend/src/components/ProtectedRoute.jsx`  depends on T020
+- [x] T024 [US1] Build AdminRoute component that redirects non-admin users to ideas list in `frontend/src/components/AdminRoute.jsx`  depends on T020
+- [x] T025 [US1] Wire all auth routes in `frontend/src/App.jsx`: `/register`, `/login`, `/` (protected)  depends on T021, T022, T023
 
 **Checkpoint**: Register  Login  `/api/auth/me` returns user with role. Logout clears cookie. Duplicate email returns 409. Wrong password returns 401.
 

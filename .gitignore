@@ -14,6 +14,11 @@ build/
 *.db
 *.sqlite
 *.sqlite3
+data/
+
+# Uploaded files (local filesystem, not to be committed)
+backend/uploads/*
+!backend/uploads/.gitkeep
 
 # Logs
 logs/
