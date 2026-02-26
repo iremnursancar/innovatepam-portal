@@ -32,22 +32,14 @@ engagement before any analytics work begins.
 it, and verify the vote count increments. Toggle the vote off and verify it
 decrements. Confirm private ideas are invisible to User B.
 
-**Acceptance Scenarios**:
-
-1. **Given** a user is submitting an idea, **When** they toggle "Make Public",
-   **Then** the idea is visible in the public feed to all authenticated users
-   after submission.
-2. **Given** a public idea from another user, **When** the viewer clicks the
-   upvote button, **Then** the vote count increments and the button enters an
-   active state.
-3. **Given** a previously upvoted idea, **When** the user clicks the upvote
-   button again, **Then** the vote is removed and the count decrements (toggle
-   behaviour).
-4. **Given** a private idea, **When** any user other than the submitter views
-   the ideas list, **Then** the private idea does not appear.
-5. **Given** an admin reviewing an idea, **When** they open the evaluation
-   panel, **Then** the current community vote count is displayed alongside the
-   idea details.
+**Acceptance Criteria:**
+- Users can mark ideas as public/private during submission (default: private)
+- Public ideas visible in shared feed to all authenticated users
+- Users can upvote public ideas with toggle functionality (cast/retract)
+- Vote counts displayed to admins in evaluation panel
+- Private ideas invisible to users other than the submitter
+- Privacy indicators (🌐 Public / 🔒 Private) shown on idea cards
+- Ideas list supports "Most Voted" sort option
 
 **Functional Requirements**:
 
@@ -86,23 +78,15 @@ accept it, then switch back to the submitter session. Verify a notification
 appears in the bell dropdown and the unread badge increments. Mark it as read
 and confirm the badge disappears.
 
-**Acceptance Scenarios**:
-
-1. **Given** an admin evaluates an idea (accepted or rejected), **When** the
-   evaluation is saved, **Then** the idea owner receives a notification with
-   the outcome.
-2. **Given** a user submits a new idea, **When** submission succeeds, **Then**
-   all admins receive a "new submission" notification.
-3. **Given** unread notifications exist, **When** the user views the navbar,
-   **Then** the bell icon displays a red badge with the unread count.
-4. **Given** a notification dropdown is open, **When** the user clicks a
-   notification, **Then** they are navigated to the relevant idea detail page
-   and the notification is marked as read.
-5. **Given** multiple unread notifications, **When** the user clicks "Mark all
-   as read", **Then** all notifications are marked read and the badge clears.
-6. **Given** the admin dashboard is open, **When** the activity feed panel
-   is rendered, **Then** the most recent platform events are listed in
-   reverse-chronological order.
+**Acceptance Criteria:**
+- Users notified when idea status changes (accepted/rejected)
+- Admins notified when new ideas are submitted
+- Bell icon shows unread count badge (hidden when count is 0)
+- Notification dropdown lists last 10 notifications newest-first
+- Clicking a notification navigates to the idea detail page and marks it as read
+- Users can mark individual notifications or all notifications as read
+- Activity feed on admin dashboard shows recent events in reverse-chronological order
+- Notification counts auto-refresh every 60 seconds without a full page reload
 
 **Functional Requirements**:
 
@@ -139,23 +123,13 @@ quality over time. Both are additive and do not block earlier stories.
 valid CSV file downloads. Submit an idea and verify AI analysis suggestions
 appear on the review screen.
 
-**Acceptance Scenarios**:
-
-1. **Given** the admin dashboard is open, **When** the statistics panel renders,
-   **Then** it displays: Total Ideas, Pending Review, Accepted, Rejected,
-   Acceptance Rate, and Most Active Category.
-2. **Given** the admin clicks "Export CSV", **When** the download completes,
-   **Then** the file contains one row per idea with all relevant fields
-   (id, title, category, status, submitter, created_at, votes).
-3. **Given** a new idea is submitted, **When** an admin opens the idea detail,
-   **Then** an AI analysis section displays: suggested category, estimated
-   impact score (1–10), and actionable improvement tips.
-4. **Given** the ideas list is visible, **When** the user types in the search
-   box or applies a status/category filter, **Then** the list updates to show
-   only matching ideas without a full page reload.
-5. **Given** an idea detail page is open, **When** the status history section
-   is rendered, **Then** a visual timeline shows each status change with actor
-   and timestamp.
+**Acceptance Criteria:**
+- Statistics panel displays 6 key metrics: total ideas, pending, accepted, rejected, acceptance rate, and most active category
+- Export CSV button (admin-only) downloads all ideas with relevant fields (id, title, category, status, submitter, created_at, votes)
+- AI analysis section on idea detail displays suggested category, impact score (1–10), and actionable improvement tips
+- Search and filter functionality (by status and category) with sort options (date, votes) available on the ideas list
+- Status timeline on idea detail shows full idea lifecycle with actor and timestamp for each transition
+- List and detail updates happen without a full page reload
 
 **Functional Requirements**:
 

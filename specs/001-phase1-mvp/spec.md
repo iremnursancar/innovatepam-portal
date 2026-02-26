@@ -7,40 +7,33 @@
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1  Employee Registration & Login (Priority: P1)
+### User Story 1 – Employee Registration & Login (Priority: P1)
 
-An employee visits the portal for the first time, creates an account with their
-email address and a password, and then signs in to access the platform. On
-returning visits they sign in directly.
+**As an** employee
+**I want to** register and sign in to the portal
+**So that** I can access the platform and submit ideas
 
 **Why this priority**: Authentication is the gating requirement for every other
 feature. No idea can be submitted or evaluated without a verified identity.
 
 **Independent Test**: Register a new account, log out, log back in. Verify the
 user lands on their home view and their name/role is shown. Delivers a secure,
-identifiable session  standalone value even before submission exists.
+identifiable session — standalone value even before submission exists.
 
-**Acceptance Scenarios**:
-
-1. **Given** an unregistered email, **When** a user submits valid registration
-   details, **Then** an account is created and the user is signed in automatically.
-2. **Given** a registered email and correct password, **When** a user submits
-   the login form, **Then** the user is signed in and redirected to their home view.
-3. **Given** a registered email and wrong password, **When** a user submits the
-   login form, **Then** an error message is shown and no session is created.
-4. **Given** an already-registered email, **When** a new registration is attempted,
-   **Then** an appropriate error is shown and no duplicate account is created.
-5. **Given** a signed-in user, **When** they log out, **Then** their session is
-   invalidated and they are redirected to the login page.
+**Acceptance Criteria:**
+- Unregistered users can create an account with a valid email and password
+- Registered users can sign in with correct credentials and are redirected to their home view
+- Invalid credentials show an error message and no session is created
+- Duplicate email registrations are rejected with an appropriate error
+- Signed-in users can log out and have their session invalidated
 
 ---
 
-### User Story 2  Idea Submission with Attachment (Priority: P2)
+### User Story 2 – Idea Submission with Attachment (Priority: P2)
 
-A signed-in employee (submitter role) fills in a short form with their innovation
-idea  providing a title, description, and category  optionally attaches a
-single supporting file, and submits the idea. The idea immediately appears in
-their personal idea list with a "Submitted" status.
+**As a** submitter
+**I want to** submit innovation ideas with supporting files
+**So that** evaluators can review my proposals with full context
 
 **Why this priority**: Idea submission is the platform's core value proposition.
 Without it there is nothing for admins to evaluate.
@@ -49,31 +42,21 @@ Without it there is nothing for admins to evaluate.
 attachment, verify the idea appears in the submitter's list with status
 "Submitted". Demonstrates end-to-end data capture independently of evaluation.
 
-**Acceptance Scenarios**:
-
-1. **Given** a signed-in submitter, **When** all required fields (title,
-   description, category) are filled and the form is submitted, **Then** the idea
-   is saved with status "Submitted" and shown in the submitter's list.
-2. **Given** a valid idea form, **When** the submitter attaches a file within the
-   allowed size and type limits, **Then** the attachment is stored and linked to
-   the idea.
-3. **Given** a valid idea form, **When** the submitter attaches a file that
-   exceeds the size limit or has a disallowed type, **Then** the upload is
-   rejected with a clear error message before submission.
-4. **Given** a signed-in submitter, **When** they submit the form with a required
-   field missing, **Then** the form is not submitted and the missing field is
-   highlighted.
-5. **Given** a signed-in submitter, **When** they attempt to attach more than one
-   file, **Then** only the first (or last selected) file is accepted; multiple
-   simultaneous attachments are not permitted.
+**Acceptance Criteria:**
+- Required fields (title, description, category) must be filled; missing fields highlight with an error
+- Ideas are saved with "Submitted" status on successful submission
+- Users can attach one file per idea within allowed size (10 MB) and type limits
+- File uploads that exceed the size limit or use a disallowed type are rejected with a clear error before submission
+- Invalid submissions are not saved and the form remains open for correction
+- Successfully submitted ideas appear immediately in the submitter's idea list
 
 ---
 
-### User Story 3  Idea Listing & Status Visibility (Priority: P3)
+### User Story 3 – Idea Listing & Status Visibility (Priority: P3)
 
-A signed-in user can view a list of ideas relevant to their role: submitters see
-their own ideas with current statuses, admins see all submitted ideas. Status
-labels make the progress of each idea immediately visible.
+**As a** user
+**I want to** view my submitted ideas and their current status
+**So that** I can track the progress of my proposals
 
 **Why this priority**: Without visibility into idea state, submitters cannot
 confirm their submissions were received and admins cannot identify what needs
@@ -83,25 +66,20 @@ attention.
 Verify both ideas appear with accurate statuses. Log in as an admin and confirm
 both ideas are visible.
 
-**Acceptance Scenarios**:
-
-1. **Given** a signed-in submitter with previously submitted ideas, **When** they
-   navigate to the idea list, **Then** all their ideas are shown with accurate
-   status labels.
-2. **Given** a signed-in admin, **When** they navigate to the idea list, **Then**
-   all ideas from all submitters are shown.
-3. **Given** a signed-in submitter, **When** they view the idea list, **Then**
-   they do not see ideas submitted by other users.
-4. **Given** an idea whose status has changed (e.g., to "Under Review"), **When**
-   the submitter views their list, **Then** the updated status is reflected.
+**Acceptance Criteria:**
+- Submitters see only their own ideas in the list
+- Admins see all ideas from all users
+- List displays: title, category, status, and submission date for each idea
+- Status updates (e.g. to "Under Review") are reflected immediately in the list
+- Clicking an idea navigates to its full detail view
 
 ---
 
-### User Story 4  Admin Evaluation Workflow (Priority: P4)
+### User Story 4 – Admin Evaluation Workflow (Priority: P4)
 
-A signed-in admin opens an idea, reviews its details and attachment, then records
-an evaluation decision of "Accepted" or "Rejected" along with a mandatory
-comment. The idea's status updates immediately to reflect the decision.
+**As an** admin/evaluator
+**I want to** review and evaluate submitted ideas
+**So that** I can approve promising innovations and provide actionable feedback
 
 **Why this priority**: The evaluation workflow closes the innovation loop. It is
 the business outcome the platform exists to facilitate, but it depends on all
@@ -111,23 +89,13 @@ three prior stories being complete.
 navigate to that idea, enter a decision with a comment, and save. Verify the
 status updates to "Accepted" or "Rejected" and the comment is visible.
 
-**Acceptance Scenarios**:
-
-1. **Given** a signed-in admin viewing an idea in "Submitted" or "Under Review"
-   status, **When** they select "Accept" and provide a comment, **Then** the
-   idea's status changes to "Accepted" and the comment is stored.
-2. **Given** a signed-in admin viewing an idea, **When** they select "Reject" and
-   provide a comment, **Then** the idea's status changes to "Rejected" and the
-   comment is stored.
-3. **Given** a signed-in admin, **When** they attempt to submit an evaluation
-   without a comment, **Then** the evaluation is not saved and a validation error
-   is shown.
-4. **Given** a signed-in submitter, **When** they attempt to access the evaluation
-   action on any idea, **Then** they are denied access (action not visible or
-   returns an error).
-5. **Given** an idea that has already been evaluated, **When** an admin views it,
-   **Then** the existing decision and comment are shown; re-evaluation replaces
-   the prior decision.
+**Acceptance Criteria:**
+- Admins can mark ideas as "Under Review" to signal evaluation has begun
+- Admins can Accept or Reject an idea with a mandatory comment; submission without a comment is blocked
+- Idea status updates immediately upon saving a decision
+- Evaluation decision and comment are preserved and visible to admins
+- Submitters cannot perform any evaluation action (not visible in UI; blocked at API level)
+- Previously recorded decisions can be updated by an admin (re-evaluation replaces prior decision)
 
 ---
 
