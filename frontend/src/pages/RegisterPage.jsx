@@ -64,24 +64,20 @@ export default function RegisterPage() {
 
         {/* ── Left: Brand panel ── */}
         <div
-          className="hidden md:flex md:w-5/12 relative text-white overflow-hidden"
+          className="hidden md:flex md:w-5/12 items-center justify-center text-white overflow-hidden"
           style={{ background: CARD_GRADIENT }}
         >
-          {/* SECTION 1 — Logo */}
-          <div className="absolute left-0 right-0 text-center" style={{ top: 120 }}>
-            <p className="text-4xl"><span className="font-medium text-white">Innovat</span><span className="font-bold text-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>&lt;epam&gt;</span></p>
+          <div className="flex flex-col items-center text-center px-8">
+            {/* Logo */}
+            <p className="text-4xl">
+              <span className="font-medium text-white">Innovat</span>
+              <span className="font-bold text-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>&lt;epam&gt;</span>
+            </p>
 
-            {/* SECTION 2 — Headline */}
-            <div style={{ marginTop: 40 }} className="text-left inline-block">
-              <p className="text-2xl font-semibold italic tracking-wide leading-relaxed text-white/70">Innovate.</p>
-              <p className="text-2xl font-semibold italic tracking-wide leading-relaxed text-white/70">Collaborate.</p>
-              <p className="text-2xl font-semibold italic tracking-wide leading-relaxed text-white/70">Transform.</p>
-            </div>
-          </div>
-
-          {/* SECTION 3 — Quote */}
-          <div className="absolute left-0 right-0 text-center max-w-xs mx-auto" style={{ bottom: 48, left: 0, right: 0 }}>
-            <p className="text-sm font-light italic text-white/50">"Every great innovation starts with an idea"</p>
+            {/* Quote */}
+            <p className="text-base font-light italic text-white/70 max-w-sm" style={{ marginTop: 150 }}>
+              &ldquo;Every great innovation starts with an idea&rdquo;
+            </p>
           </div>
         </div>
 
