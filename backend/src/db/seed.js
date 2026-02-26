@@ -7,7 +7,7 @@ const { findByEmail, createUser } = require('../repositories/userRepository')
 
 const BCRYPT_ROUNDS = 12
 
-const ADMIN_EMAIL = 'admin@innovatepam.com'
+const ADMIN_EMAIL = 'admin@epam.com'
 const ADMIN_PASSWORD = 'Admin123'
 const ADMIN_ROLE = 'admin'
 

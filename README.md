@@ -99,7 +99,7 @@ npm test
 ```
 
 Tests use isolated in-memory SQLite instances per file and run with `--maxWorkers=3`.  
-Coverage:
+Coverage: 108 tests passing across Phase 1 + Phase 2 features.
 
 ```bash
 npm test -- --coverage
@@ -120,6 +120,31 @@ npm test -- --coverage
 | Mark Under Review | `PATCH /api/ideas/:id/status` | Admin |
 | Evaluate idea | `POST /api/evaluations` | Admin |
 | Download attachment | `GET /api/attachments/:id/download` | Owner or Admin |
+| List notifications | `GET /api/notifications` | Authenticated |
+| Mark notification read | `PATCH /api/notifications/:id/read` | Authenticated |
+| Mark all read | `PATCH /api/notifications/read-all` | Authenticated |
+| Notification counts | `GET /api/notifications/count` | Authenticated |
+| Vote on idea | `POST /api/ideas/:id/vote` | Authenticated |
+| Statistics | `GET /api/stats` | Admin |
+| Export CSV | `GET /api/ideas/export` | Admin |
+
+### Phase 1 MVP (Branch: `001-phase1-mvp`)
+- **User Authentication**: Register, login, logout with HTTP-only JWT cookies
+- **Idea Submission**: Rich form with title, description, category, file attachment
+- **Admin Evaluation**: Accept / reject ideas with mandatory evaluator comments
+- **Status Tracking**: Submitted → Under Review → Accepted / Rejected
+- **Role-based Access**: Submitter vs Admin guards on every protected route
+
+### Phase 2 Enhancements (Branch: `002-phase2-enhancements`)
+- **Community Voting System**: Public/private ideas with upvote functionality
+- **Real-time Notifications**: Bell icon with dropdown, unread badges, mark as read
+- **Activity Monitoring**: Admin activity feed showing recent platform events
+- **Analytics Dashboard**: 6-metric statistics panel (total, pending, acceptance rate, etc.)
+- **CSV Export**: Download all ideas for offline reporting (admin-only)
+- **AI-Powered Analysis**: Smart category suggestions, impact estimation, actionable tips
+- **Enhanced Navigation**: Separate "My Ideas" and "Browse Community Ideas" pages
+- **Status Timeline**: Visual history showing idea lifecycle with timestamps
+- **Search & Filters**: Advanced filtering by status, category, with sort options
 
 ### Idea categories
 
@@ -135,6 +160,12 @@ npm test -- --coverage
 Submitted → Under Review → Accepted
                         → Rejected
 ```
+
+### Database
+
+- **Migrations**: 7 total (auto-applied on server start, idempotent)
+- **Tables**: `users`, `ideas`, `evaluations`, `attachments`, `activities`, `notifications`, `idea_votes`, `idea_status_history`
+- **Notable columns**: `ideas.is_public` (Phase 2 public/private toggle)
 
 ---
 

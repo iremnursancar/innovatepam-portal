@@ -4,7 +4,7 @@ const { Database } = require('node-sqlite3-wasm')
 const path = require('path')
 
 const DB_PATH = path.resolve(__dirname, '../data/innovatepam.db')
-const TARGET_EMAIL = 'admin@innovatepam.com'
+const TARGET_EMAIL = 'admin@epam.com'
 
 const db = new Database(DB_PATH)
 

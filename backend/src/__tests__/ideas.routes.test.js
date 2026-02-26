@@ -21,6 +21,10 @@ const { getDb, closeDb } = require('../db/database')
 
 function clearTables() {
   const db = getDb()
+  db.exec('DELETE FROM notifications')
+  db.exec('DELETE FROM idea_status_history')
+  db.exec('DELETE FROM idea_votes')
+  db.exec('DELETE FROM activities')
   db.exec('DELETE FROM evaluations')
   db.exec('DELETE FROM attachments')
   db.exec('DELETE FROM ideas')

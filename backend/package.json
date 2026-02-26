@@ -11,7 +11,7 @@
     "test:coverage": "jest --maxWorkers=3 --coverage",
     "test:watch": "jest --watch",
     "make-admin": "node scripts/make-admin.js",
-    "curl-make-admin": "curl -X POST http://localhost:3000/api/auth/make-admin -H \"Content-Type: application/json\" -d \"{\\\"email\\\":\\\"admin@innovatepam.com\\\"}\""
+    "curl-make-admin": "curl -X POST http://localhost:3000/api/auth/make-admin -H \"Content-Type: application/json\" -d \"{\\\"email\\\":\\\"admin@epam.com\\\"}\""
   },
   "keywords": [],
   "author": "",
