@@ -15,27 +15,30 @@ const CATEGORY_LABELS = {
 
 /** Individual stat card */
 function StatCard({ icon: Icon, value, label, colorClasses }) {
-  const { border, iconBg, iconText, valueText } = colorClasses
+  const { border, valueText } = colorClasses
   return (
-    <div className={`rounded-xl border ${border} bg-navy-card/80 backdrop-blur-sm p-5 flex flex-col gap-3 shadow-card-dark hover:shadow-card-hover transition-shadow`}>
-      <div className={`w-10 h-10 rounded-lg ${iconBg} flex items-center justify-center`}>
-        <Icon className={`h-5 w-5 ${iconText}`} aria-hidden="true" />
+    <div className={`rounded-2xl border-2 border-[#E8E5FF] bg-white p-6 flex flex-col gap-4 shadow-lg hover:-translate-y-1 hover:shadow-xl transition-all duration-200 cursor-default`}>
+      <div
+        className="w-11 h-11 rounded-xl flex items-center justify-center"
+        style={{ background: 'linear-gradient(135deg, #8B7AC7 0%, #7277F1 100%)' }}
+      >
+        <Icon className="h-5 w-5 text-white" aria-hidden="true" />
       </div>
       <div>
-        <p className={`text-3xl font-bold ${valueText}`}>{value}</p>
-        <p className="text-sm text-slate-400 mt-0.5">{label}</p>
+        <p className={`text-4xl font-bold ${valueText} leading-none`}>{value}</p>
+        <p className="text-sm text-gray-500 mt-1.5">{label}</p>
       </div>
     </div>
   )
 }
 
 const COLORS = {
-  blue:  { border: 'border-blue-500/20',    iconBg: 'bg-blue-500/10',   iconText: 'text-blue-400',   valueText: 'text-blue-300'   },
-  amber: { border: 'border-amber-500/20',   iconBg: 'bg-amber-500/10',  iconText: 'text-amber-400',  valueText: 'text-amber-300'  },
-  green: { border: 'border-emerald-500/20', iconBg: 'bg-emerald-500/10',iconText: 'text-emerald-400',valueText: 'text-emerald-300' },
-  red:   { border: 'border-rose-500/20',    iconBg: 'bg-rose-500/10',   iconText: 'text-rose-400',   valueText: 'text-rose-300'   },
-  teal:  { border: 'border-teal-500/20',    iconBg: 'bg-teal-500/10',   iconText: 'text-teal-400',   valueText: 'text-teal-300'   },
-  violet:{ border: 'border-violet-500/20',  iconBg: 'bg-violet-500/10', iconText: 'text-violet-400', valueText: 'text-violet-300'  },
+  blue:  { border: 'border-blue-100',     valueText: 'text-blue-700'    },
+  amber: { border: 'border-amber-100',    valueText: 'text-amber-700'   },
+  green: { border: 'border-emerald-100',  valueText: 'text-emerald-700' },
+  red:   { border: 'border-rose-100',     valueText: 'text-rose-700'    },
+  teal:  { border: 'border-teal-100',     valueText: 'text-teal-700'    },
+  violet:{ border: 'border-[#7277F1]/15', valueText: 'text-[#7277F1]'   },
 }
 
 export default function StatisticsPanel() {
@@ -73,14 +76,14 @@ export default function StatisticsPanel() {
   if (loading) {
     return (
       <div className="flex justify-center py-10">
-        <div className="h-6 w-6 rounded-full border-2 border-cyan-800 border-t-cyan-400 animate-spin" />
+        <div className="h-6 w-6 rounded-full border-2 border-gray-200 border-t-[#7277F1] animate-spin" />
       </div>
     )
   }
 
   if (error) {
     return (
-      <p className="rounded-md bg-rose-500/10 border border-rose-500/30 px-4 py-3 text-sm text-rose-300">
+      <p className="rounded-md bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-600">
         {error}
       </p>
     )
@@ -101,18 +104,18 @@ export default function StatisticsPanel() {
 
   return (
     <section aria-label="Statistics">
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="text-xs font-semibold text-slate-500 tracking-widest uppercase">Overview</h2>
+      <div className="flex items-center justify-between mb-5">
+        <h2 className="text-xs font-semibold text-gray-400 tracking-widest uppercase">Overview</h2>
         <button
           onClick={handleExport}
           disabled={exporting}
-          className="inline-flex items-center gap-1.5 rounded-md border border-navy-border bg-navy-card/60 px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-cyan-400 hover:border-cyan-500/40 disabled:opacity-50 transition-all"
+          className="inline-flex items-center gap-1.5 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-500 hover:text-[#7277F1] hover:border-[#7277F1]/40 disabled:opacity-50 transition-all"
         >
           <Download className="h-3.5 w-3.5" aria-hidden="true" />
           {exporting ? 'Exporting…' : 'Export CSV'}
         </button>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {cards.map(({ icon, value, label, color }) => (
           <StatCard
             key={label}

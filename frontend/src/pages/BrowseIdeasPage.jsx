@@ -46,7 +46,7 @@ function applyFilters(ideas, { search, status, category, sort }) {
 }
 
 const selectClass =
-  'rounded-md border border-navy-border bg-navy-950/60 px-3 py-1.5 text-sm text-slate-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-colors'
+  'rounded-md border border-[#E8E5FF] bg-white px-3 py-1.5 text-sm text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#7277F1]/40 focus:border-[#7277F1] transition-colors'
 
 export default function BrowseIdeasPage() {
   const { user }   = useAuth()
@@ -84,19 +84,19 @@ export default function BrowseIdeasPage() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-[#FAFBFC]">
       <Navbar />
       <main className="max-w-6xl mx-auto px-4 py-8">
 
         <div className="flex items-center justify-between mb-5">
           <div>
-            <h1 className="text-2xl font-bold text-slate-100">Browse Community Ideas</h1>
-            <p className="text-sm text-slate-500 mt-0.5">Discover and vote on public ideas from your colleagues</p>
+            <h1 className="text-2xl font-bold text-gray-900">Browse Community Ideas</h1>
+            <p className="text-sm text-gray-500 mt-0.5">Discover and vote on public ideas from your colleagues</p>
           </div>
         </div>
 
         {!loading && !error && ideas.length > 0 && (
-          <div className="bg-navy-card/80 backdrop-blur-sm border border-navy-border rounded-lg px-4 py-3 mb-5 shadow-card-dark">
+          <div className="bg-white border-2 border-[#E8E5FF] rounded-xl px-4 py-3 mb-5 shadow-lg">
             <div className="flex flex-wrap items-center gap-3">
               <div className="relative flex-1 min-w-[180px]">
                 <input
@@ -104,37 +104,37 @@ export default function BrowseIdeasPage() {
                   placeholder="Search title or description…"
                   value={search}
                   onChange={e => setSearch(e.target.value)}
-                  className="w-full rounded-md border border-navy-border bg-navy-950/60 pl-3 pr-8 py-1.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-colors"
+                  className="w-full rounded-md border border-[#E8E5FF] bg-white pl-3 pr-8 py-1.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#7277F1]/40 focus:border-[#7277F1] transition-colors"
                 />
                 {search && (
-                  <button onClick={() => setSearch('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300" aria-label="Clear search">
+                  <button onClick={() => setSearch('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600" aria-label="Clear search">
                     <X className="h-3.5 w-3.5" />
                   </button>
                 )}
               </div>
               <select value={status} onChange={e => setStatus(e.target.value)} className={selectClass}>
-                <option value="" className="bg-navy-900">All Statuses</option>
+                <option value="">All Statuses</option>
                 {Object.entries(STATUS_LABELS).map(([val, label]) => (
-                  <option key={val} value={val} className="bg-navy-900">{label}</option>
+                  <option key={val} value={val}>{label}</option>
                 ))}
               </select>
               <select value={category} onChange={e => setCategory(e.target.value)} className={selectClass}>
-                <option value="" className="bg-navy-900">All Categories</option>
+                <option value="">All Categories</option>
                 {Object.entries(CATEGORY_LABELS).map(([val, label]) => (
-                  <option key={val} value={val} className="bg-navy-900">{label}</option>
+                  <option key={val} value={val}>{label}</option>
                 ))}
               </select>
               <select value={sort} onChange={e => setSort(e.target.value)} className={selectClass}>
-                <option value="newest"    className="bg-navy-900">Newest</option>
-                <option value="votes"     className="bg-navy-900">Most Voted</option>
-                <option value="oldest"    className="bg-navy-900">Oldest</option>
-                <option value="title_asc" className="bg-navy-900">Title A–Z</option>
+                <option value="newest"    >Newest</option>
+                <option value="votes"     >Most Voted</option>
+                <option value="oldest"    >Oldest</option>
+                <option value="title_asc" >Title A–Z</option>
               </select>
               {hasActiveFilters && (
-                <button onClick={resetFilters} className="text-xs text-slate-500 hover:text-cyan-400 transition-colors whitespace-nowrap">Reset filters</button>
+                <button onClick={resetFilters} className="text-xs text-gray-400 hover:text-[#7277F1] transition-colors whitespace-nowrap">Reset filters</button>
               )}
             </div>
-            <p className="mt-2 text-xs text-slate-600">
+            <p className="mt-2 text-xs text-gray-500">
               Showing {filtered.length} of {ideas.length} public idea{ideas.length !== 1 ? 's' : ''}
             </p>
           </div>
@@ -142,16 +142,16 @@ export default function BrowseIdeasPage() {
 
         {loading && (
           <div className="flex justify-center py-16">
-            <div className="h-8 w-8 rounded-full border-4 border-cyan-800 border-t-cyan-400 animate-spin" />
+            <div className="h-8 w-8 rounded-full border-4 border-gray-200 border-t-[#7277F1] animate-spin" />
           </div>
         )}
 
         {error && (
-          <div className="rounded-md bg-rose-500/10 border border-rose-500/30 px-4 py-3 text-sm text-rose-300">{error}</div>
+          <div className="rounded-md bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-600">{error}</div>
         )}
 
         {!loading && !error && ideas.length === 0 && (
-          <div className="text-center py-16 text-slate-500">
+          <div className="text-center py-16 text-gray-400">
             <Globe className="h-10 w-10 mx-auto mb-3 opacity-30" />
             <p className="text-lg font-medium mb-1">No public ideas yet</p>
             <p className="text-sm">Be the first to share a public idea with the community.</p>
@@ -159,17 +159,17 @@ export default function BrowseIdeasPage() {
         )}
 
         {!loading && !error && ideas.length > 0 && filtered.length === 0 && (
-          <div className="text-center py-16 text-slate-500">
+          <div className="text-center py-16 text-gray-400">
             <p className="text-base font-medium mb-1">No ideas match your filters</p>
-            <button onClick={resetFilters} className="text-sm text-cyan-400 hover:text-cyan-300 hover:underline transition-colors">Clear filters</button>
+            <button onClick={resetFilters} className="text-sm text-[#7277F1] hover:opacity-80 hover:underline transition-colors">Clear filters</button>
           </div>
         )}
 
         {!loading && filtered.length > 0 && (
           <div className="space-y-3">
             {filtered.map(idea => (
-              <div key={idea.id} className="flex items-stretch bg-navy-card/90 backdrop-blur-sm rounded-lg border border-navy-border shadow-card-dark hover:border-cyan-500/30 hover:shadow-[0_4px_20px_rgba(6,182,212,0.08)] transition-all duration-200">
-                <div className="flex items-center px-3 py-4 border-r border-navy-border/60">
+              <div key={idea.id} className="flex items-stretch bg-white rounded-2xl border-2 border-[#E8E5FF] shadow-lg hover:-translate-y-0.5 hover:border-[#7277F1]/40 hover:shadow-xl transition-all duration-200">
+                <div className="flex items-center px-3 py-4 border-r border-gray-100">
                   <VoteButton
                     ideaId={idea.id}
                     initialCount={idea.voteCount ?? 0}
@@ -180,13 +180,13 @@ export default function BrowseIdeasPage() {
                 <Link to={`/ideas/${idea.id}`} className="flex-1 min-w-0 p-4">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                      <h2 className="text-base font-semibold text-slate-100 truncate">{idea.title}</h2>
-                      <p className="mt-1 text-sm text-slate-400 line-clamp-2">{idea.description}</p>
-                      <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500">
+                      <h2 className="text-base font-semibold text-gray-900 truncate">{idea.title}</h2>
+                      <p className="mt-1 text-sm text-gray-500 line-clamp-2">{idea.description}</p>
+                      <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-gray-400">
                         <span>{CATEGORY_LABELS[idea.category] ?? idea.category}</span>
                         {idea.submitter_email && <span>by {idea.submitter_email}</span>}
                         <span>{new Date(idea.created_at).toLocaleDateString()}</span>
-                        <span className="inline-flex items-center gap-0.5 text-emerald-400">
+                        <span className="inline-flex items-center gap-0.5 text-emerald-600">
                           <Globe className="h-3 w-3" aria-hidden="true" />Public
                         </span>
                       </div>

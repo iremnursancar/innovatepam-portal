@@ -6,10 +6,10 @@ const POLL_INTERVAL_MS = 30_000
 
 /** Map activity type → icon component + colour classes */
 const TYPE_CONFIG = {
-  idea_submitted:    { Icon: Send,        colour: 'text-blue-400',   bg: 'bg-blue-500/10',   label: 'submitted'       },
-  idea_under_review: { Icon: Eye,         colour: 'text-amber-400',  bg: 'bg-amber-500/10',  label: 'moved to review' },
-  idea_accepted:     { Icon: CheckCircle, colour: 'text-emerald-400',bg: 'bg-emerald-500/10',label: 'accepted'        },
-  idea_rejected:     { Icon: XCircle,     colour: 'text-rose-400',   bg: 'bg-rose-500/10',   label: 'rejected'        },
+  idea_submitted:    { Icon: Send,        colour: 'text-blue-600',    bg: 'bg-blue-50',    label: 'submitted'       },
+  idea_under_review: { Icon: Eye,         colour: 'text-amber-600',   bg: 'bg-amber-50',   label: 'moved to review' },
+  idea_accepted:     { Icon: CheckCircle, colour: 'text-emerald-600', bg: 'bg-emerald-50', label: 'accepted'        },
+  idea_rejected:     { Icon: XCircle,     colour: 'text-rose-600',    bg: 'bg-rose-50',    label: 'rejected'        },
 }
 
 /** Returns a human-readable relative time string, e.g. "5 minutes ago". */
@@ -60,14 +60,14 @@ export default function ActivityFeed() {
   }, [])
 
   return (
-    <div className="bg-navy-card/90 backdrop-blur-sm rounded-xl border border-navy-border shadow-card-dark overflow-hidden">
+    <div className="bg-white rounded-2xl border border-[#EBEBEB] shadow-md overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-5 py-4 border-b border-navy-border/60">
-        <h2 className="text-sm font-semibold text-slate-200 tracking-tight">Activity Feed</h2>
+      <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+        <h2 className="text-sm font-semibold text-gray-700 tracking-tight">Activity Feed</h2>
         <button
           onClick={fetchActivities}
           title="Refresh"
-          className="text-slate-500 hover:text-cyan-400 transition-colors"
+          className="text-gray-400 hover:text-[#7277F1] transition-colors"
           aria-label="Refresh activity feed"
         >
           <RefreshCw className="h-4 w-4" aria-hidden="true" />
@@ -75,19 +75,19 @@ export default function ActivityFeed() {
       </div>
 
       {/* Body */}
-      <div className="divide-y divide-navy-border/40">
+      <div className="divide-y divide-gray-100">
         {loading && (
           <div className="flex justify-center py-10">
-            <div className="h-6 w-6 rounded-full border-2 border-cyan-800 border-t-cyan-400 animate-spin" />
+            <div className="h-6 w-6 rounded-full border-2 border-gray-200 border-t-[#7277F1] animate-spin" />
           </div>
         )}
 
         {!loading && error && (
-          <p className="px-5 py-4 text-sm text-rose-400">{error}</p>
+          <p className="px-6 py-5 text-sm text-rose-600">{error}</p>
         )}
 
         {!loading && !error && activities.length === 0 && (
-          <p className="px-5 py-6 text-sm text-center text-slate-500">No activity yet.</p>
+          <p className="px-6 py-8 text-sm text-center text-gray-400">No activity yet.</p>
         )}
 
         {!loading && activities.map(activity => {
@@ -96,20 +96,20 @@ export default function ActivityFeed() {
           const verb = cfg.label
 
           return (
-            <div key={activity.id} className="flex items-start gap-3 px-5 py-3 hover:bg-navy-800/30 transition-colors">
+            <div key={activity.id} className="flex items-start gap-4 px-6 py-4 hover:bg-gray-50 transition-colors">
               {/* Icon bubble */}
-              <div className={`mt-0.5 flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center ${bg}`}>
-                <Icon className={`h-3.5 w-3.5 ${colour}`} aria-hidden="true" />
+              <div className={`mt-0.5 flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center ${bg}`}>
+                <Icon className={`h-4 w-4 ${colour}`} aria-hidden="true" />
               </div>
 
               {/* Text */}
               <div className="flex-1 min-w-0">
-                <p className="text-sm text-slate-300 leading-snug">
-                  <span className="font-medium text-slate-100">{activity.user_email}</span>
+                <p className="text-sm text-gray-600 leading-snug">
+                  <span className="font-medium text-gray-900">{activity.user_email}</span>
                   {' '}{verb}{' '}
-                  <span className="font-medium text-slate-100">&ldquo;{activity.idea_title}&rdquo;</span>
+                  <span className="font-medium text-gray-900">&ldquo;{activity.idea_title}&rdquo;</span>
                 </p>
-                <p className="mt-0.5 text-xs text-slate-500">{timeAgo(activity.timestamp)}</p>
+                <p className="mt-0.5 text-xs text-gray-400">{timeAgo(activity.timestamp)}</p>
               </div>
             </div>
           )
@@ -118,8 +118,8 @@ export default function ActivityFeed() {
 
       {/* Footer: last refreshed */}
       {lastRefresh && !loading && (
-        <div className="px-5 py-2 border-t border-navy-border/30">
-          <p className="text-xs text-slate-600">
+        <div className="px-6 py-3 border-t border-gray-100">
+          <p className="text-xs text-gray-400">
             Auto-refreshes every 30 s &middot; last updated {lastRefresh.toLocaleTimeString()}
           </p>
         </div>

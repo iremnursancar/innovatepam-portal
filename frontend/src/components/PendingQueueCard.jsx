@@ -9,8 +9,8 @@ const STATUS_LABELS = {
 }
 
 const STATUS_COLORS = {
-  submitted:    'text-cyan-400 bg-cyan-400/10 border-cyan-400/20',
-  under_review: 'text-amber-400 bg-amber-400/10 border-amber-400/20',
+  submitted:    'text-blue-600 bg-blue-50 border-blue-200',
+  under_review: 'text-amber-700 bg-amber-50 border-amber-200',
 }
 
 function formatDate(iso) {
@@ -38,7 +38,7 @@ export default function PendingQueueCard() {
   const preview = pending.slice(0, 5)
 
   return (
-    <div className="rounded-xl border border-amber-500/20 bg-navy-card/80 backdrop-blur-sm shadow-card-dark">
+    <div className="rounded-xl border border-amber-200 bg-white shadow-sm">
       {/* Header */}
       <div className="flex items-center justify-between px-5 pt-5 pb-3">
         <div className="flex items-center gap-3">
@@ -46,9 +46,9 @@ export default function PendingQueueCard() {
             <ClipboardList className="h-5 w-5 text-amber-400" aria-hidden="true" />
           </div>
           <div>
-            <h2 className="text-base font-semibold text-slate-100">Pending Review</h2>
+            <h2 className="text-base font-semibold text-gray-800">Pending Review</h2>
             {!loading && !error && (
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-gray-500 mt-0.5">
                 {pending.length === 0
                   ? 'No ideas awaiting review'
                   : `${pending.length} idea${pending.length !== 1 ? 's' : ''} awaiting your review`}
@@ -57,7 +57,7 @@ export default function PendingQueueCard() {
           </div>
         </div>
         {!loading && pending.length > 0 && (
-          <span className="px-2.5 py-0.5 rounded-full text-sm font-bold bg-amber-500/15 text-amber-300 border border-amber-500/25">
+          <span className="px-2.5 py-0.5 rounded-full text-sm font-bold bg-amber-50 text-amber-700 border border-amber-200">
             {pending.length}
           </span>
         )}
@@ -67,40 +67,40 @@ export default function PendingQueueCard() {
       <div className="px-5 pb-5">
         {loading && (
           <div className="flex justify-center py-6">
-            <div className="h-5 w-5 rounded-full border-2 border-amber-800 border-t-amber-400 animate-spin" />
+            <div className="h-5 w-5 rounded-full border-2 border-gray-200 border-t-amber-500 animate-spin" />
           </div>
         )}
 
         {error && (
-          <p className="text-sm text-rose-400 py-4 text-center">{error}</p>
+          <p className="text-sm text-rose-600 py-4 text-center">{error}</p>
         )}
 
         {!loading && !error && pending.length === 0 && (
-          <p className="text-sm text-slate-500 py-4 text-center">All ideas have been reviewed. 🎉</p>
+          <p className="text-sm text-gray-400 py-4 text-center">All ideas have been reviewed. 🎉</p>
         )}
 
         {!loading && !error && preview.length > 0 && (
-          <ul className="divide-y divide-navy-border/40 mb-4">
+          <ul className="divide-y divide-gray-100 mb-4">
             {preview.map(idea => (
               <li key={idea.id}>
                 <Link
                   to={`/ideas/${idea.id}`}
-                  className="flex items-start justify-between gap-3 py-3 hover:text-cyan-400 transition-colors group"
+                  className="flex items-start justify-between gap-3 py-3 hover:text-[#7277F1] transition-colors group"
                 >
                   <div className="flex-1 min-w-0">
-                    <span className="block text-sm font-medium text-slate-200 group-hover:text-cyan-400 truncate transition-colors">
+                    <span className="block text-sm font-medium text-gray-800 group-hover:text-[#7277F1] truncate transition-colors">
                       {idea.title}
                     </span>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className={`inline-block text-[11px] font-medium px-1.5 py-0.5 rounded border ${STATUS_COLORS[idea.status] ?? 'text-slate-400 bg-slate-400/10 border-slate-400/20'}`}>
+                      <span className={`inline-block text-[11px] font-medium px-1.5 py-0.5 rounded border ${STATUS_COLORS[idea.status] ?? 'text-gray-500 bg-gray-100 border-gray-200'}`}>
                         {STATUS_LABELS[idea.status] ?? idea.status}
                       </span>
                       {idea.is_public === 1 && idea.voteCount != null && (
-                        <span className="text-xs text-slate-500">▲ {idea.voteCount}</span>
+                        <span className="text-xs text-gray-400">▲ {idea.voteCount}</span>
                       )}
                     </div>
                   </div>
-                  <span className="text-xs text-slate-500 shrink-0 mt-0.5">{formatDate(idea.created_at)}</span>
+                  <span className="text-xs text-gray-400 shrink-0 mt-0.5">{formatDate(idea.created_at)}</span>
                 </Link>
               </li>
             ))}
@@ -110,7 +110,7 @@ export default function PendingQueueCard() {
         {!loading && !error && (
           <button
             onClick={() => navigate('/ideas?filter=pending')}
-            className="w-full rounded-md border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm font-medium text-amber-300 hover:bg-amber-500/20 hover:border-amber-500/50 transition-all text-center"
+            className="w-full rounded-md border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-700 hover:bg-amber-100 hover:border-amber-300 transition-all text-center"
           >
             Review All Pending Ideas →
           </button>

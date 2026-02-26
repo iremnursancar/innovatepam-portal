@@ -1,10 +1,10 @@
 import { Send, Eye, CheckCircle2, XCircle } from 'lucide-react'
 
 const STATUS_CONFIG = {
-  submitted:    { Icon: Send,         color: 'text-blue-400',    bg: 'bg-blue-500/10',    border: 'border-blue-500/25',    label: 'Submitted'    },
-  under_review: { Icon: Eye,          color: 'text-amber-400',   bg: 'bg-amber-500/10',   border: 'border-amber-500/25',   label: 'Under Review' },
-  accepted:     { Icon: CheckCircle2, color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/25', label: 'Accepted'     },
-  rejected:     { Icon: XCircle,      color: 'text-rose-400',    bg: 'bg-rose-500/10',    border: 'border-rose-500/25',    label: 'Rejected'     },
+  submitted:    { Icon: Send,         color: 'text-blue-600',    bg: 'bg-blue-50',    border: 'border-blue-200',    label: 'Submitted'    },
+  under_review: { Icon: Eye,          color: 'text-amber-600',   bg: 'bg-amber-50',   border: 'border-amber-200',   label: 'Under Review' },
+  accepted:     { Icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200', label: 'Accepted'     },
+  rejected:     { Icon: XCircle,      color: 'text-rose-600',    bg: 'bg-rose-50',    border: 'border-rose-200',    label: 'Rejected'     },
 }
 
 function formatDateTime(isoString) {
@@ -43,8 +43,8 @@ export default function StatusTimeline({ idea }) {
   const history = buildHistory(idea)
 
   return (
-    <section aria-label="Status timeline" className="mt-6 bg-navy-card/90 backdrop-blur-sm rounded-lg border border-navy-border shadow-card-dark p-5">
-      <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-4">
+    <section aria-label="Status timeline" className="mt-6 bg-white rounded-lg border border-gray-200 shadow-sm p-5">
+      <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">
         Status Timeline
       </h2>
 
@@ -62,15 +62,15 @@ export default function StatusTimeline({ idea }) {
                   <Icon className={`h-4 w-4 ${color}`} aria-hidden="true" />
                 </div>
                 {!isLast && (
-                  <div className="w-px flex-1 bg-navy-border/50 my-1" aria-hidden="true" />
+                  <div className="w-px flex-1 bg-gray-200 my-1" aria-hidden="true" />
                 )}
               </div>
 
               {/* Right column: text */}
               <div className={`pb-5 ${isLast ? '' : ''}`}>
                 <p className={`text-sm font-semibold ${color}`}>{label}</p>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  by <span className="font-medium text-slate-300">{entry.changedBy}</span>
+                <p className="text-xs text-gray-400 mt-0.5">
+                  by <span className="font-medium text-gray-700">{entry.changedBy}</span>
                   {' · '}
                   {formatDateTime(entry.timestamp)}
                 </p>

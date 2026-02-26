@@ -65,8 +65,8 @@ export default function VoteButton({
           ? 'px-4 py-3 min-w-[60px]'
           : 'px-2.5 py-1.5 min-w-[44px]',
         voted
-          ? 'border-cyan-500/40 bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 shadow-glow-cyan'
-          : 'border-navy-border bg-navy-card/60 text-slate-500 hover:border-slate-500 hover:text-slate-300',
+          ? 'border-[#7277F1]/40 bg-[#7277F1]/10 text-[#7277F1] hover:bg-[#7277F1]/20'
+          : 'border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-600',
         loading ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer',
       ].join(' ')}
     >

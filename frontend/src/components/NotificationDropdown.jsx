@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Bell } from 'lucide-react'
+import { Bell, Lightbulb, Eye, CheckCircle, XCircle } from 'lucide-react'
 import { getNotifications, markOneRead, markAllRead } from '../api/notificationsApi'
 import { fetchStats } from '../api/statsApi'
 import { useAuth } from '../context/AuthContext'
@@ -21,11 +21,11 @@ function relativeTime(isoString) {
 /** Icon + colour per notification type. */
 function typeStyle(type) {
   switch (type) {
-    case 'new_submission': return { icon: '💡', color: 'text-cyan-400' }
-    case 'under_review':   return { icon: '👁️', color: 'text-amber-400' }
-    case 'accepted':       return { icon: '✅', color: 'text-emerald-400' }
-    case 'rejected':       return { icon: '❌', color: 'text-rose-400' }
-    default:               return { icon: '🔔', color: 'text-slate-400' }
+    case 'new_submission': return { bg: '#EFF6FF', color: '#3B82F6', Icon: Lightbulb }
+    case 'under_review':   return { bg: '#FEF3C7', color: '#F59E0B', Icon: Eye }
+    case 'accepted':       return { bg: '#ECFDF5', color: '#10B981', Icon: CheckCircle }
+    case 'rejected':       return { bg: '#FEF2F2', color: '#EF4444', Icon: XCircle }
+    default:               return { bg: '#F3F4F6', color: '#9CA3AF', Icon: Bell }
   }
 }
 
@@ -102,7 +102,7 @@ export default function NotificationDropdown() {
       {/* Bell button */}
       <button
         onClick={() => setOpen(o => !o)}
-        className="relative text-slate-400 hover:text-cyan-400 transition-colors"
+        className="relative text-gray-500 hover:text-[#7277F1] transition-colors"
         aria-label="Notifications"
       >
         <Bell className="h-5 w-5" />
@@ -115,14 +115,14 @@ export default function NotificationDropdown() {
 
       {/* Dropdown */}
       {open && (
-        <div className="absolute right-0 top-8 z-50 w-80 rounded-lg border border-navy-border bg-[#0d2137] shadow-2xl overflow-hidden">
+        <div className="absolute right-0 top-8 z-50 w-80 rounded-xl border border-[#E8E5FF] bg-white shadow-xl overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-navy-border">
-            <span className="text-sm font-semibold text-slate-200">Notifications</span>
+          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+            <span className="text-sm font-semibold text-gray-700">Notifications</span>
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAllRead}
-                className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors"
+                className="text-xs text-[#7277F1] hover:opacity-80 transition-colors"
               >
                 Mark all as read
               </button>
@@ -130,36 +130,40 @@ export default function NotificationDropdown() {
           </div>
 
           {/* Notification list */}
-          <ul className="max-h-80 overflow-y-auto divide-y divide-navy-border/50">
+          <ul className="max-h-80 overflow-y-auto divide-y divide-gray-100">
             {loading && (
-              <li className="px-4 py-6 text-center text-sm text-slate-500">Loading…</li>
+              <li className="px-4 py-6 text-center text-sm text-gray-400">Loading…</li>
             )}
             {!loading && recent.length === 0 && (
-              <li className="px-4 py-6 text-center text-sm text-slate-500">No notifications yet.</li>
+              <li className="px-4 py-6 text-center text-sm text-gray-400">No notifications yet.</li>
             )}
             {!loading && recent.map(notif => {
-              const { icon, color } = typeStyle(notif.type)
+              const { bg, color, Icon } = typeStyle(notif.type)
               return (
                 <li key={notif.id}>
                   <button
                     onClick={() => handleClickNotification(notif)}
-                    className={`w-full text-left px-4 py-3 hover:bg-navy-card/60 transition-colors flex items-start gap-3 ${notif.is_read ? 'opacity-60' : ''}`}
+                    className={`w-full text-left px-4 py-3 hover:bg-[#FAFBFC] transition-colors flex items-center gap-3 ${notif.is_read ? 'opacity-50' : ''}`}
                   >
-                    {/* Unread dot */}
-                    <span className="mt-0.5 shrink-0">
-                      {!notif.is_read && (
-                        <span className="inline-block h-2 w-2 rounded-full bg-cyan-400 mr-1" />
-                      )}
+                    {/* Coloured icon container */}
+                    <span
+                      className="shrink-0 flex items-center justify-center w-8 h-8 rounded-lg"
+                      style={{ background: bg }}
+                    >
+                      <Icon className="h-4 w-4" style={{ color }} strokeWidth={2} />
                     </span>
-                    <span className="text-lg leading-none shrink-0">{icon}</span>
                     <span className="flex-1 min-w-0">
-                      <span className={`block text-sm font-medium ${color} truncate`}>
+                      <span className="block text-sm font-medium text-gray-800 truncate">
                         {notif.message}
                       </span>
-                      <span className="block text-xs text-slate-500 mt-0.5">
+                      <span className="block text-xs text-gray-400 mt-0.5">
                         {relativeTime(notif.created_at)}
                       </span>
                     </span>
+                    {/* Unread dot */}
+                    {!notif.is_read && (
+                      <span className="shrink-0 h-2 w-2 rounded-full bg-[#7277F1]" />
+                    )}
                   </button>
                 </li>
               )
@@ -167,10 +171,10 @@ export default function NotificationDropdown() {
           </ul>
           {/* Footer: pending ideas shortcut (admin only) */}
           {isAdmin && (
-            <div className="px-4 py-3 border-t border-navy-border">
+            <div className="px-4 py-3 border-t border-gray-100">
               <button
                 onClick={() => { setOpen(false); navigate('/ideas?filter=pending') }}
-                className="w-full rounded-md border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm font-medium text-amber-300 hover:bg-amber-500/20 hover:border-amber-500/50 transition-all text-center"
+                className="w-full rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-medium text-amber-700 hover:bg-amber-100 hover:border-amber-300 transition-all text-center"
               >
                 📋 View {pendingCount} Pending Idea{pendingCount !== 1 ? 's' : ''}
               </button>

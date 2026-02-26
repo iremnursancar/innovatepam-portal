@@ -1,22 +1,16 @@
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import {
-  Card, CardHeader, CardTitle, CardDescription,
-  CardContent, CardFooter,
-} from '../components/ui/card'
-import { Button }                    from '../components/ui/button'
-import { Input }                     from '../components/ui/input'
-import { Label }                     from '../components/ui/label'
-import { Alert, AlertDescription }   from '../components/ui/alert'
-import { Loader2 }                   from 'lucide-react'
+import { Loader2 } from 'lucide-react'
+
+const BG_GRADIENT   = 'linear-gradient(135deg, #FAF5FF 20%, #E8E5FF 100%)'
+const CARD_GRADIENT = 'linear-gradient(315deg, #42055C 20%, #7277F1 100%)'
 
 export default function LoginPage() {
-  const { login }     = useAuth()
-  const navigate      = useNavigate()
-  const location      = useLocation()
+  const { login }  = useAuth()
+  const navigate   = useNavigate()
+  const location   = useLocation()
 
-  // If the user was redirected here from a protected route, go back after login
   const from = location.state?.from?.pathname ?? '/'
 
   const [email,    setEmail]    = useState('')
@@ -27,12 +21,10 @@ export default function LoginPage() {
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
-
     if (!email || !password) {
       setError('Please enter your email and password.')
       return
     }
-
     setLoading(true)
     try {
       await login(email, password)
@@ -45,92 +37,120 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-navy-gradient flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Logo / branding */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-3 bg-gradient-to-br from-cyan-500 to-cyan-400 shadow-glow-cyan">
-            <span className="text-navy-950 text-xl font-bold">I</span>
+    <div
+      className="min-h-screen flex items-center justify-center px-4 py-10"
+      style={{ background: BG_GRADIENT }}
+    >
+      <div
+        className="w-full flex flex-col md:flex-row rounded-2xl overflow-hidden"
+        style={{
+          maxWidth: 900,
+          minHeight: 560,
+          boxShadow: '0 25px 60px rgba(55, 48, 163, 0.45), 0 8px 24px rgba(79, 70, 229, 0.25)',
+        }}
+      >
+
+        {/* ── Left: Brand panel ── */}
+        <div
+          className="hidden md:flex md:w-5/12 relative text-white overflow-hidden"
+          style={{ background: CARD_GRADIENT }}
+        >
+          {/* SECTION 1 — Logo */}
+          <div className="absolute left-0 right-0 text-center" style={{ top: 120 }}>
+            <p className="text-4xl"><span className="font-medium text-white">Innovat</span><span className="font-bold text-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>&lt;epam&gt;</span></p>
+
+            {/* SECTION 2 — Headline */}
+            <div style={{ marginTop: 40 }} className="text-left inline-block">
+              <p className="text-2xl font-semibold italic tracking-wide leading-snug text-white/70">Innovate.</p>
+              <p className="text-2xl font-semibold italic tracking-wide leading-snug text-white/70">Collaborate.</p>
+              <p className="text-2xl font-semibold italic tracking-wide leading-snug text-white/70">Transform.</p>
+            </div>
           </div>
-          <h1 className="text-2xl font-bold text-slate-100">InnovatEPAM</h1>
-          <p className="text-sm text-slate-400 mt-1">Innovation Portal</p>
+
+          {/* SECTION 3 — Quote */}
+          <div className="absolute left-0 right-0 text-center max-w-xs mx-auto" style={{ bottom: 48, left: 0, right: 0 }}>
+            <p className="text-sm font-light italic text-white/50">"Every great innovation starts with an idea"</p>
+          </div>
         </div>
 
-        <Card className="border-navy-border/80 shadow-card-dark backdrop-blur-xl">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-xl">Sign in</CardTitle>
-            <CardDescription>
-              Enter your credentials to access the portal.
-            </CardDescription>
-          </CardHeader>
+        {/* ── Mobile-only top bar ── */}
+        <div
+          className="md:hidden flex items-center justify-center py-7 px-6 text-white"
+          style={{ background: CARD_GRADIENT }}
+        >
+          <p className="text-xl"><span className="font-medium text-white">Innovat</span><span className="font-bold text-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>&lt;epam&gt;</span></p>
+        </div>
 
-          <CardContent>
+        {/* ── Right: Form panel ── */}
+        <div className="flex-1 bg-white flex items-center justify-center px-10 py-16">
+          <div className="w-full max-w-sm">
+            <h2 className="text-2xl font-bold text-gray-900 mb-1">Welcome back</h2>
+            <p className="text-sm text-gray-500 mb-8">Sign in to your account to continue.</p>
+
             {error && (
-              <Alert variant="error" className="mb-5">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
+              <div className="mb-6 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+                {error}
+              </div>
             )}
 
-            <form onSubmit={handleSubmit} noValidate className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email address</Label>
-                <Input
+            <form onSubmit={handleSubmit} noValidate className="space-y-5">
+              <div>
+                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                  Email address
+                </label>
+                <input
                   id="email"
                   type="email"
-                  placeholder="you@company.com"
+                  placeholder="you@epam.com"
                   autoComplete="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  aria-invalid={!!error}
+                  onChange={e => setEmail(e.target.value)}
                   required
+                  className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500 transition-colors"
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
+              <div>
+                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                  Password
+                </label>
+                <input
                   id="password"
                   type="password"
                   placeholder="Your password"
                   autoComplete="current-password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  aria-invalid={!!error}
+                  onChange={e => setPassword(e.target.value)}
                   required
+                  className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500 transition-colors"
                 />
               </div>
 
-              <Button
+              <button
                 type="submit"
-                className="w-full"
-                size="lg"
                 disabled={loading}
                 aria-busy={loading}
+                className="w-full rounded-xl py-3 text-sm font-bold text-white shadow-lg transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-60 mt-2"
+                style={{ background: CARD_GRADIENT, boxShadow: '0 4px 16px rgba(79, 70, 229, 0.45)' }}
               >
                 {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+                  <span className="inline-flex items-center justify-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
                     Signing in…
-                  </>
-                ) : (
-                  'Sign in'
-                )}
-              </Button>
+                  </span>
+                ) : 'Sign in'}
+              </button>
             </form>
-          </CardContent>
 
-          <CardFooter className="justify-center border-t border-navy-border/60 pt-4">
-            <p className="text-sm text-slate-400">
+            <p className="mt-8 text-center text-sm text-gray-500">
               Don&apos;t have an account?{' '}
-              <Link
-                to="/register"
-                className="font-medium text-cyan-400 hover:text-cyan-300 hover:underline transition-colors"
-              >
+              <Link to="/register" className="font-semibold text-violet-600 hover:text-violet-500 transition-colors">
                 Create one
               </Link>
             </p>
-          </CardFooter>
-        </Card>
+          </div>
+        </div>
+
       </div>
     </div>
   )

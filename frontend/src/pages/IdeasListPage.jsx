@@ -51,7 +51,7 @@ function applyFilters(ideas, { search, status, category, sort }) {
 }
 
 const selectClass =
-  'rounded-md border border-navy-border bg-navy-950/60 px-3 py-1.5 text-sm text-slate-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-colors'
+  'rounded-md border border-[#E8E5FF] bg-white px-3 py-1.5 text-sm text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#7277F1]/40 focus:border-[#7277F1] transition-colors'
 
 export default function IdeasListPage() {
   const { user }    = useAuth()
@@ -102,18 +102,19 @@ export default function IdeasListPage() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-[#FAFBFC]">
       <Navbar />
       <main className="max-w-6xl mx-auto px-4 py-8">
 
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
-          <h1 className="text-2xl font-bold text-slate-100">
+          <h1 className="text-2xl font-bold text-gray-900">
             {user?.role === 'admin' ? 'All Ideas' : 'My Ideas'}
           </h1>
           <button
             onClick={() => navigate('/ideas/new')}
-            className="rounded-md bg-gradient-to-r from-cyan-500 to-cyan-400 text-navy-950 font-semibold px-4 py-2 text-sm hover:from-cyan-400 hover:to-cyan-300 shadow-glow-cyan transition-all"
+            className="rounded-md font-semibold px-4 py-2 text-sm text-white transition-all hover:opacity-90"
+            style={{ background: 'linear-gradient(135deg, #8B7AC7 0%, #7277F1 100%)' }}
           >
             + New Idea
           </button>
@@ -121,7 +122,7 @@ export default function IdeasListPage() {
 
         {/* Filter bar — only when ideas are loaded */}
         {!loading && !error && ideas.length > 0 && (
-          <div className="bg-navy-card/80 backdrop-blur-sm border border-navy-border rounded-lg px-4 py-3 mb-5 shadow-card-dark">
+          <div className="bg-white border-2 border-[#E8E5FF] rounded-xl px-4 py-3 mb-5 shadow-lg">
             <div className="flex flex-wrap items-center gap-3">
 
               {/* Search */}
@@ -131,12 +132,12 @@ export default function IdeasListPage() {
                   placeholder="Search title or description…"
                   value={search}
                   onChange={e => setSearch(e.target.value)}
-                  className="w-full rounded-md border border-navy-border bg-navy-950/60 pl-3 pr-8 py-1.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-colors"
+                  className="w-full rounded-md border border-[#E8E5FF] bg-white pl-3 pr-8 py-1.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#7277F1]/40 focus:border-[#7277F1] transition-colors"
                 />
                 {search && (
                   <button
                     onClick={() => setSearch('')}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                     aria-label="Clear search"
                   >
                     <X className="h-3.5 w-3.5" />
@@ -146,32 +147,32 @@ export default function IdeasListPage() {
 
               {/* Status */}
               <select value={status} onChange={e => setStatus(e.target.value)} className={selectClass}>
-                <option value="" className="bg-navy-900">All Statuses</option>
+                <option value="">All Statuses</option>
                 {Object.entries(STATUS_LABELS).map(([val, label]) => (
-                  <option key={val} value={val} className="bg-navy-900">{label}</option>
+                  <option key={val} value={val}>{label}</option>
                 ))}
               </select>
 
               {/* Category */}
               <select value={category} onChange={e => setCategory(e.target.value)} className={selectClass}>
-                <option value="" className="bg-navy-900">All Categories</option>
+                <option value="">All Categories</option>
                 {Object.entries(CATEGORY_LABELS).map(([val, label]) => (
-                  <option key={val} value={val} className="bg-navy-900">{label}</option>
+                  <option key={val} value={val}>{label}</option>
                 ))}
               </select>
 
               {/* Sort */}
               <select value={sort} onChange={e => setSort(e.target.value)} className={selectClass}>
-                <option value="newest" className="bg-navy-900">Newest</option>
-                <option value="oldest" className="bg-navy-900">Oldest</option>
-                <option value="title_asc" className="bg-navy-900">Title A–Z</option>
+                <option value="newest">Newest</option>
+                <option value="oldest">Oldest</option>
+                <option value="title_asc">Title A–Z</option>
               </select>
 
               {/* Reset */}
               {hasActiveFilters && (
                 <button
                   onClick={resetFilters}
-                  className="text-xs text-slate-500 hover:text-cyan-400 transition-colors whitespace-nowrap"
+                  className="text-xs text-gray-400 hover:text-[#7277F1] transition-colors whitespace-nowrap"
                 >
                   Reset filters
                 </button>
@@ -179,7 +180,7 @@ export default function IdeasListPage() {
             </div>
 
             {/* Results count */}
-            <p className="mt-2 text-xs text-slate-600">
+            <p className="mt-2 text-xs text-gray-500">
               Showing {filtered.length} of {ideas.length} idea{ideas.length !== 1 ? 's' : ''}
             </p>
           </div>
@@ -188,32 +189,32 @@ export default function IdeasListPage() {
         {/* Loading */}
         {loading && (
           <div className="flex justify-center py-16">
-            <div className="h-8 w-8 rounded-full border-4 border-cyan-800 border-t-cyan-400 animate-spin" />
+            <div className="h-8 w-8 rounded-full border-4 border-gray-200 border-t-[#7277F1] animate-spin" />
           </div>
         )}
 
         {/* Fetch error */}
         {error && (
-          <div className="rounded-md bg-rose-500/10 border border-rose-500/30 px-4 py-3 text-sm text-rose-300">
+          <div className="rounded-md bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-600">
             {error}
           </div>
         )}
 
         {/* Empty — no ideas at all */}
         {!loading && !error && ideas.length === 0 && (
-          <div className="text-center py-16 text-slate-500">
+          <div className="text-center py-16 text-gray-400">
             <p className="text-lg font-medium mb-2">No ideas yet</p>
             <p>
-              <Link to="/ideas/new" className="text-cyan-400 hover:text-cyan-300 hover:underline transition-colors">Submit your first idea</Link>
+              <Link to="/ideas/new" className="text-[#7277F1] hover:opacity-80 hover:underline transition-colors">Submit your first idea</Link>
             </p>
           </div>
         )}
 
         {/* Empty — filters produced no results */}
         {!loading && !error && ideas.length > 0 && filtered.length === 0 && (
-          <div className="text-center py-16 text-slate-500">
+          <div className="text-center py-16 text-gray-400">
             <p className="text-base font-medium mb-1">No ideas match your filters</p>
-            <button onClick={resetFilters} className="text-sm text-cyan-400 hover:text-cyan-300 hover:underline transition-colors">
+            <button onClick={resetFilters} className="text-sm text-[#7277F1] hover:opacity-80 hover:underline transition-colors">
               Clear filters
             </button>
           </div>
@@ -225,10 +226,10 @@ export default function IdeasListPage() {
             {filtered.map(idea => (
               <div
                 key={idea.id}
-                className="flex items-stretch bg-navy-card/90 backdrop-blur-sm rounded-lg border border-navy-border shadow-card-dark hover:border-cyan-500/30 hover:shadow-[0_4px_20px_rgba(6,182,212,0.08)] transition-all duration-200"
+                className="flex items-stretch bg-white rounded-2xl border-2 border-[#E8E5FF] shadow-lg hover:-translate-y-0.5 hover:border-[#7277F1]/40 hover:shadow-xl transition-all duration-200"
               >
                 {/* Vote column — only for public ideas */}
-                <div className="flex items-center px-3 py-4 border-r border-navy-border/60">
+                <div className="flex items-center px-3 py-4 border-r border-gray-100">
                   {idea.is_public
                     ? (
                       <VoteButton
@@ -241,7 +242,7 @@ export default function IdeasListPage() {
                     : (
                       <div
                         title="Private ideas cannot be voted on"
-                        className="flex flex-col items-center gap-0.5 px-2.5 py-1.5 min-w-[44px] rounded-lg border border-navy-border bg-navy-950/40 text-slate-600 cursor-not-allowed select-none"
+                        className="flex flex-col items-center gap-0.5 px-2.5 py-1.5 min-w-[44px] rounded-lg border border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed select-none"
                       >
                         <Lock className="h-4 w-4" aria-hidden="true" />
                         <span className="text-xs font-semibold">{idea.voteCount ?? 0}</span>
@@ -257,9 +258,9 @@ export default function IdeasListPage() {
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                      <h2 className="text-base font-semibold text-slate-100 truncate">{idea.title}</h2>
-                      <p className="mt-1 text-sm text-slate-400 line-clamp-2">{idea.description}</p>
-                      <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500">
+                      <h2 className="text-base font-semibold text-gray-900 truncate">{idea.title}</h2>
+                      <p className="mt-1 text-sm text-gray-500 line-clamp-2">{idea.description}</p>
+                      <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-gray-400">
                         <span>{CATEGORY_LABELS[idea.category] ?? idea.category}</span>
                         {user?.role === 'admin' && idea.submitter_email && (
                           <span>by {idea.submitter_email}</span>
@@ -267,8 +268,8 @@ export default function IdeasListPage() {
                         <span>{new Date(idea.created_at).toLocaleDateString()}</span>
                         {/* Privacy badge */}
                         {idea.is_public
-                          ? <span className="inline-flex items-center gap-0.5 text-emerald-400"><Globe className="h-3 w-3" aria-hidden="true" />Public</span>
-                          : <span className="inline-flex items-center gap-0.5 text-slate-500"><Lock className="h-3 w-3" aria-hidden="true" />Private</span>
+                          ? <span className="inline-flex items-center gap-0.5 text-emerald-600"><Globe className="h-3 w-3" aria-hidden="true" />Public</span>
+                          : <span className="inline-flex items-center gap-0.5 text-gray-400"><Lock className="h-3 w-3" aria-hidden="true" />Private</span>
                         }
                       </div>
                     </div>

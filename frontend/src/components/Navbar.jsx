@@ -5,16 +5,17 @@ import NotificationDropdown from './NotificationDropdown'
 
 function navLinkClass({ isActive }) {
   return [
-    'font-medium transition-all duration-200',
+    'text-sm font-medium transition-colors duration-200',
     isActive
-      ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]'
-      : 'text-slate-400 hover:text-cyan-400',
+      ? 'text-[#7277F1]'
+      : 'text-gray-500 hover:text-[#7277F1]',
   ].join(' ')
 }
 
 export default function Navbar() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
+  const displayName = user?.email ? user.email.split('@')[0] : ''
 
   async function handleLogout() {
     await logout()
@@ -22,14 +23,15 @@ export default function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-navy-border/80 bg-[#0d2137]/80 backdrop-blur-xl shadow-[0_1px_0_rgba(45,55,72,0.6)]">
+    <header className="sticky top-0 z-50 border-b border-[#E8E5FF] bg-white">
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
         {/* Brand */}
-        <Link
-          to="/"
-          className="font-bold text-lg tracking-tight bg-gradient-to-r from-cyan-400 to-cyan-300 bg-clip-text text-transparent"
-        >
-          InnovatEPAM
+        <Link to="/" className="flex items-center text-xl tracking-tight select-none">
+          <span className="font-medium text-gray-700">Innovat</span>
+          <span
+            className="font-bold bg-gradient-to-r from-[#7277F1] to-[#42055C] bg-clip-text text-transparent"
+            style={{ fontFamily: 'Montserrat, sans-serif' }}
+          >{'<epam>'}</span>
         </Link>
 
         {/* Navigation links */}
@@ -52,11 +54,18 @@ export default function Navbar() {
         </nav>
 
         {/* User info + logout */}
-        <div className="flex items-center gap-3 text-sm">
-          <span className="text-slate-500 hidden sm:inline">{user?.email}</span>
-          {user?.role === 'admin' && (
-            <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-gray-500 hidden sm:inline">{displayName}</span>
+          {user?.role === 'admin' ? (
+            <span
+              className="px-2 py-0.5 rounded-full text-xs font-semibold text-white"
+              style={{ background: 'linear-gradient(135deg, #8B7AC7 0%, #7277F1 100%)' }}
+            >
               Admin
+            </span>
+          ) : (
+            <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-[#7277F1]/10 text-[#7277F1] border border-[#7277F1]/20">
+              User
             </span>
           )}
           {/* Notification bell dropdown */}
@@ -64,7 +73,7 @@ export default function Navbar() {
 
           <button
             onClick={handleLogout}
-            className="text-slate-500 hover:text-rose-400 font-medium transition-colors"
+            className="text-sm text-gray-500 hover:text-rose-500 font-medium transition-colors"
           >
             Logout
           </button>
