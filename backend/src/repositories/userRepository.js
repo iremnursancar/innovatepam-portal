@@ -48,4 +48,15 @@ function updateUserRole(email, role) {
   return findByEmail(email)
 }
 
-module.exports = { findByEmail, findById, createUser, updateUserRole }
+/**
+ * Returns all users with the given role.
+ * @param {string} role
+ * @returns {Array<{ id: number, email: string, role: string, created_at: string }>}
+ */
+function findByRole(role) {
+  return getDb()
+    .prepare('SELECT id, email, role, created_at FROM users WHERE role = ?')
+    .all(role)
+}
+
+module.exports = { findByEmail, findById, createUser, updateUserRole, findByRole }

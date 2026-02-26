@@ -31,19 +31,21 @@ app.use('/uploads', express.static(config.UPLOADS_PATH))
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }))
 
 // ── Route mounting ────────────────────────────────────────────────────────────
-const authRoutes        = require('./routes/auth')
-const ideasRoutes       = require('./routes/ideas')
-const evaluationsRoutes = require('./routes/evaluations')
-const attachmentsRoutes = require('./routes/attachments')
-const activitiesRoutes  = require('./routes/activities')
-const statsRoutes       = require('./routes/stats')
+const authRoutes          = require('./routes/auth')
+const ideasRoutes         = require('./routes/ideas')
+const evaluationsRoutes   = require('./routes/evaluations')
+const attachmentsRoutes   = require('./routes/attachments')
+const activitiesRoutes    = require('./routes/activities')
+const statsRoutes         = require('./routes/stats')
+const notificationsRoutes = require('./routes/notifications')
 
-app.use('/api/auth',        authRoutes)
-app.use('/api/ideas',       ideasRoutes)
-app.use('/api/evaluations', evaluationsRoutes)
-app.use('/api/attachments', attachmentsRoutes)
-app.use('/api/activities',  activitiesRoutes)
-app.use('/api/stats',       statsRoutes)
+app.use('/api/auth',          authRoutes)
+app.use('/api/ideas',         ideasRoutes)
+app.use('/api/evaluations',   evaluationsRoutes)
+app.use('/api/attachments',   attachmentsRoutes)
+app.use('/api/activities',    activitiesRoutes)
+app.use('/api/stats',         statsRoutes)
+app.use('/api/notifications', notificationsRoutes)
 
 // ── 404 handler ──────────────────────────────────────────────────────────────
 app.use((_req, res) => {

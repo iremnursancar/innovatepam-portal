@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { submitEvaluation } from '../api/evaluationsApi'
+import { useAuth } from '../context/AuthContext'
 
 /**
  * EvaluationPanel — shown to admins only on the idea detail page.
@@ -8,8 +9,10 @@ import { submitEvaluation } from '../api/evaluationsApi'
  *   onEvaluated — callback(updatedData) after a successful evaluation
  */
 export default function EvaluationPanel({ idea, onEvaluated }) {
+  const { user: currentUser } = useAuth()
   const existing = idea.evaluation
   const isFinalized = idea.status === 'accepted' || idea.status === 'rejected'
+  const isOwnIdea = currentUser?.id === idea.submitter_id
 
   const [decision, setDecision] = useState(existing?.decision ?? 'accepted')
   const [comment, setComment]   = useState(existing?.comment  ?? '')
@@ -40,6 +43,13 @@ export default function EvaluationPanel({ idea, onEvaluated }) {
         {isFinalized ? 'Evaluation' : 'Evaluate this Idea'}
       </h2>
 
+      {/* Self-evaluation prevention */}
+      {isOwnIdea && !isFinalized && (
+        <p className="text-sm text-amber-400 bg-amber-400/10 border border-amber-400/30 rounded-md px-3 py-2">
+          ⚠️ You cannot evaluate your own idea. Another admin must review it.
+        </p>
+      )}
+
       {/* Read-only view when already finalized */}
       {isFinalized && existing ? (
         <div className="space-y-2 text-sm">
@@ -57,9 +67,22 @@ export default function EvaluationPanel({ idea, onEvaluated }) {
             <p className="text-slate-500 text-xs">Evaluated by {existing.admin_email}</p>
           )}
         </div>
-      ) : (
+      ) : isOwnIdea ? null : (
         /* Editable form */
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Community vote count — public ideas only */}
+          {idea.is_public ? (
+            <div className="flex items-start gap-3 rounded-lg border border-cyan-500/20 bg-cyan-500/5 px-4 py-3">
+              <span className="text-xl leading-none mt-0.5">👍</span>
+              <div>
+                <p className="text-sm font-semibold text-cyan-300">
+                  {idea.voteCount ?? 0} Community Vote{(idea.voteCount ?? 0) !== 1 ? 's' : ''}
+                </p>
+                <p className="text-xs text-slate-500 mt-0.5">Community feedback can inform your decision.</p>
+              </div>
+            </div>
+          ) : null}
+
           {/* Decision toggle */}
           <fieldset>
             <legend className="text-sm font-medium text-slate-300 mb-2">Decision</legend>

@@ -4,7 +4,8 @@ const { Router } = require('express')
 const authenticate = require('../middleware/authenticate')
 const upload = require('../middleware/upload')
 const { submitIdea, listIdeas, getIdeaDetail, markUnderReview, analyzeIdea } = require('../services/ideaService')
-const { toggleVote, getVoteInfo } = require('../repositories/voteRepository')
+const { toggleVote, getVoteInfo, enrichWithVotes } = require('../repositories/voteRepository')
+const { findAll } = require('../repositories/ideaRepository')
 
 const router = Router()
 
@@ -59,6 +60,48 @@ router.get('/', (req, res, next) => {
   try {
     const ideas = listIdeas(req.user)
     return res.json({ ideas })
+  } catch (err) {
+    next(err)
+  }
+})
+
+/**
+ * GET /api/ideas/export
+ * Admin-only: stream all ideas as a downloadable CSV file.
+ */
+router.get('/export', (req, res, next) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Admin access required.' })
+    }
+
+    const ideas = enrichWithVotes(findAll(), req.user.id)
+
+    const HEADERS = ['ID', 'Title', 'Category', 'Status', 'Submitter Email', 'Vote Count', 'Is Public', 'Created Date']
+
+    function escapeCsv(value) {
+      const str = value == null ? '' : String(value)
+      return str.includes(',') || str.includes('"') || str.includes('\n')
+        ? `"${str.replace(/"/g, '""')}"`
+        : str
+    }
+
+    const rows = ideas.map(idea => [
+      idea.id,
+      idea.title,
+      idea.category,
+      idea.status,
+      idea.submitter_email ?? '',
+      idea.voteCount ?? 0,
+      idea.is_public ? 'Yes' : 'No',
+      idea.created_at ? new Date(idea.created_at).toISOString().split('T')[0] : '',
+    ].map(escapeCsv).join(','))
+
+    const csv = [HEADERS.join(','), ...rows].join('\r\n')
+
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8')
+    res.setHeader('Content-Disposition', 'attachment; filename="ideas-export.csv"')
+    return res.send(csv)
   } catch (err) {
     next(err)
   }

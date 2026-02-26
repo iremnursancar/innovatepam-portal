@@ -1,16 +1,27 @@
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import {
   Card, CardHeader, CardTitle, CardContent,
 } from '../components/ui/card'
-import { Lightbulb, PlusCircle, ClipboardList } from 'lucide-react'
-import Navbar        from '../components/Navbar'
-import ActivityFeed  from '../components/ActivityFeed'
+import { PlusCircle, ClipboardList, Globe, Clock } from 'lucide-react'
+import Navbar          from '../components/Navbar'
+import ActivityFeed    from '../components/ActivityFeed'
 import StatisticsPanel from '../components/StatisticsPanel'
+import { fetchStats } from '../api/statsApi'
 
 export default function DashboardPage() {
-  const { user } = useAuth()
-  const isAdmin  = user?.role === 'admin'
+  const { user }   = useAuth()
+  const navigate   = useNavigate()
+  const isAdmin    = user?.role === 'admin'
+  const [pendingCount, setPendingCount] = useState(null)
+
+  useEffect(() => {
+    if (!isAdmin) return
+    fetchStats()
+      .then(s => setPendingCount(s.pendingReview ?? 0))
+      .catch(() => {})
+  }, [isAdmin])
 
   return (
     <div className="min-h-screen">
@@ -32,59 +43,104 @@ export default function DashboardPage() {
         {/* Quick-action cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
 
-          {/* Browse Ideas */}
-          <Link to="/ideas" className="group block focus:outline-none">
-            <Card className="h-full hover:border-cyan-500/40 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300 group-focus-visible:ring-2 group-focus-visible:ring-cyan-500/50">
-              <CardHeader>
-                <div className="w-10 h-10 bg-cyan-500/10 border border-cyan-500/20 rounded-lg flex items-center justify-center mb-2 group-hover:bg-cyan-500/20 transition-colors">
-                  <ClipboardList className="h-5 w-5 text-cyan-400" aria-hidden="true" />
-                </div>
-                <CardTitle className="text-base">Browse Ideas</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-slate-400">
-                  {isAdmin
-                    ? 'View all submitted ideas and record evaluations.'
-                    : 'See your submitted ideas and check their status.'}
-                </p>
-              </CardContent>
-            </Card>
-          </Link>
+          {isAdmin ? (
+            <>
+              {/* Admin card 1: Browse All Ideas */}
+              <button onClick={() => navigate('/ideas')} className="group block text-left focus:outline-none">
+                <Card className="h-full hover:border-cyan-500/40 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300 group-focus-visible:ring-2 group-focus-visible:ring-cyan-500/50">
+                  <CardHeader>
+                    <div className="w-10 h-10 bg-cyan-500/10 border border-cyan-500/20 rounded-lg flex items-center justify-center mb-2 group-hover:bg-cyan-500/20 transition-colors">
+                      <ClipboardList className="h-5 w-5 text-cyan-400" aria-hidden="true" />
+                    </div>
+                    <CardTitle className="text-base">Browse All Ideas</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-slate-400">View all ideas in the system.</p>
+                  </CardContent>
+                </Card>
+              </button>
 
-          {/* Submit New Idea */}
-          <Link to="/ideas/new" className="group block focus:outline-none">
-            <Card className="h-full hover:border-emerald-500/40 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] transition-all duration-300 group-focus-visible:ring-2 group-focus-visible:ring-emerald-500/50">
-              <CardHeader>
-                <div className="w-10 h-10 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center justify-center mb-2 group-hover:bg-emerald-500/20 transition-colors">
-                  <PlusCircle className="h-5 w-5 text-emerald-400" aria-hidden="true" />
-                </div>
-                <CardTitle className="text-base">Submit New Idea</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-slate-400">
-                  Got an idea? Submit it for review and track its progress.
-                </p>
-              </CardContent>
-            </Card>
-          </Link>
+              {/* Admin card 2: Review Pending Ideas */}
+              <button onClick={() => navigate('/ideas?filter=pending')} className="group block text-left focus:outline-none">
+                <Card className="h-full hover:border-amber-500/40 hover:shadow-[0_0_30px_rgba(245,158,11,0.15)] transition-all duration-300 group-focus-visible:ring-2 group-focus-visible:ring-amber-500/50">
+                  <CardHeader>
+                    <div className="w-10 h-10 bg-amber-500/10 border border-amber-500/20 rounded-lg flex items-center justify-center mb-2 group-hover:bg-amber-500/20 transition-colors">
+                      <Clock className="h-5 w-5 text-amber-400" aria-hidden="true" />
+                    </div>
+                    <CardTitle className="text-base">Review Pending Ideas</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-slate-400">
+                      {pendingCount !== null
+                        ? `${pendingCount} idea${pendingCount !== 1 ? 's' : ''} awaiting your review.`
+                        : 'Ideas awaiting your review.'}
+                    </p>
+                  </CardContent>
+                </Card>
+              </button>
 
-          {/* Admin: quick view of idea backlog */}
-          {isAdmin && (
-            <Link to="/ideas" className="group block focus:outline-none">
-              <Card className="h-full hover:border-violet-500/40 hover:shadow-[0_0_30px_rgba(139,92,246,0.15)] transition-all duration-300 group-focus-visible:ring-2 group-focus-visible:ring-violet-500/50">
-                <CardHeader>
-                  <div className="w-10 h-10 bg-violet-500/10 border border-violet-500/20 rounded-lg flex items-center justify-center mb-2 group-hover:bg-violet-500/20 transition-colors">
-                    <Lightbulb className="h-5 w-5 text-violet-400" aria-hidden="true" />
-                  </div>
-                  <CardTitle className="text-base">Evaluate Ideas</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-slate-400">
-                    Accept or reject ideas with a mandatory comment.
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
+              {/* Admin card 3: Submit New Idea */}
+              <Link to="/ideas/new" className="group block focus:outline-none">
+                <Card className="h-full hover:border-emerald-500/40 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] transition-all duration-300 group-focus-visible:ring-2 group-focus-visible:ring-emerald-500/50">
+                  <CardHeader>
+                    <div className="w-10 h-10 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center justify-center mb-2 group-hover:bg-emerald-500/20 transition-colors">
+                      <PlusCircle className="h-5 w-5 text-emerald-400" aria-hidden="true" />
+                    </div>
+                    <CardTitle className="text-base">Submit New Idea</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-slate-400">Share your innovation with the team.</p>
+                  </CardContent>
+                </Card>
+              </Link>
+            </>
+          ) : (
+            <>
+              {/* User card 1: My Ideas */}
+              <Link to="/ideas/my" className="group block focus:outline-none">
+                <Card className="h-full hover:border-cyan-500/40 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300 group-focus-visible:ring-2 group-focus-visible:ring-cyan-500/50">
+                  <CardHeader>
+                    <div className="w-10 h-10 bg-cyan-500/10 border border-cyan-500/20 rounded-lg flex items-center justify-center mb-2 group-hover:bg-cyan-500/20 transition-colors">
+                      <ClipboardList className="h-5 w-5 text-cyan-400" aria-hidden="true" />
+                    </div>
+                    <CardTitle className="text-base">My Ideas</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-slate-400">View your submitted ideas and check their status.</p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              {/* User card 2: Browse Community Ideas */}
+              <Link to="/ideas/browse" className="group block focus:outline-none">
+                <Card className="h-full hover:border-violet-500/40 hover:shadow-[0_0_30px_rgba(139,92,246,0.15)] transition-all duration-300 group-focus-visible:ring-2 group-focus-visible:ring-violet-500/50">
+                  <CardHeader>
+                    <div className="w-10 h-10 bg-violet-500/10 border border-violet-500/20 rounded-lg flex items-center justify-center mb-2 group-hover:bg-violet-500/20 transition-colors">
+                      <Globe className="h-5 w-5 text-violet-400" aria-hidden="true" />
+                    </div>
+                    <CardTitle className="text-base">Browse Community Ideas</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-slate-400">Discover and vote on public ideas from colleagues.</p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              {/* User card 3: Submit New Idea */}
+              <Link to="/ideas/new" className="group block focus:outline-none">
+                <Card className="h-full hover:border-emerald-500/40 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] transition-all duration-300 group-focus-visible:ring-2 group-focus-visible:ring-emerald-500/50">
+                  <CardHeader>
+                    <div className="w-10 h-10 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center justify-center mb-2 group-hover:bg-emerald-500/20 transition-colors">
+                      <PlusCircle className="h-5 w-5 text-emerald-400" aria-hidden="true" />
+                    </div>
+                    <CardTitle className="text-base">Submit New Idea</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-slate-400">Share your innovation with the team.</p>
+                  </CardContent>
+                </Card>
+              </Link>
+            </>
           )}
 
         </div>
@@ -96,8 +152,8 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Activity Feed */}
-        <ActivityFeed />
+        {/* Activity Feed — admin only */}
+        {user?.role === 'admin' && <ActivityFeed />}
       </main>
     </div>
   )

@@ -1,6 +1,7 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { LayoutDashboard } from 'lucide-react'
+import NotificationDropdown from './NotificationDropdown'
 
 function navLinkClass({ isActive }) {
   return [
@@ -39,12 +40,15 @@ export default function Navbar() {
               Dashboard
             </span>
           </NavLink>
-          <NavLink to="/ideas" className={navLinkClass}>
-            Ideas
-          </NavLink>
-          <NavLink to="/ideas/new" className={navLinkClass}>
-            Submit Idea
-          </NavLink>
+          {user?.role === 'admin' ? (
+            <NavLink to="/ideas" className={navLinkClass}>Ideas</NavLink>
+          ) : (
+            <>
+              <NavLink to="/ideas/my" className={navLinkClass}>My Ideas</NavLink>
+              <NavLink to="/ideas/browse" className={navLinkClass}>Browse Ideas</NavLink>
+            </>
+          )}
+          <NavLink to="/ideas/new" className={navLinkClass}>Submit Idea</NavLink>
         </nav>
 
         {/* User info + logout */}
@@ -55,6 +59,9 @@ export default function Navbar() {
               Admin
             </span>
           )}
+          {/* Notification bell dropdown */}
+          <NotificationDropdown />
+
           <button
             onClick={handleLogout}
             className="text-slate-500 hover:text-rose-400 font-medium transition-colors"

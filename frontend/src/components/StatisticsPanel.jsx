@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import {
-  Layers, Clock, CheckCircle2, XCircle, TrendingUp, Tag,
+  Layers, Clock, CheckCircle2, XCircle, TrendingUp, Tag, Download,
 } from 'lucide-react'
 import { fetchStats } from '../api/statsApi'
+import apiClient from '../api/apiClient'
 
 const CATEGORY_LABELS = {
   process_improvement: 'Process Improvement',
@@ -38,9 +39,10 @@ const COLORS = {
 }
 
 export default function StatisticsPanel() {
-  const [stats,   setStats]   = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error,   setError]   = useState('')
+  const [stats,      setStats]      = useState(null)
+  const [loading,    setLoading]    = useState(true)
+  const [error,      setError]      = useState('')
+  const [exporting,  setExporting]  = useState(false)
 
   useEffect(() => {
     fetchStats()
@@ -48,6 +50,25 @@ export default function StatisticsPanel() {
       .catch(() => setError('Could not load statistics.'))
       .finally(() => setLoading(false))
   }, [])
+
+  async function handleExport() {
+    setExporting(true)
+    try {
+      const response = await apiClient.get('/ideas/export', { responseType: 'blob' })
+      const url  = URL.createObjectURL(new Blob([response.data], { type: 'text/csv' }))
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `ideas-export-${new Date().toISOString().split('T')[0]}.csv`
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      URL.revokeObjectURL(url)
+    } catch {
+      // silently ignore — user can retry
+    } finally {
+      setExporting(false)
+    }
+  }
 
   if (loading) {
     return (
@@ -80,9 +101,17 @@ export default function StatisticsPanel() {
 
   return (
     <section aria-label="Statistics">
-      <h2 className="text-xs font-semibold text-slate-500 mb-3 tracking-widest uppercase">
-        Overview
-      </h2>
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-xs font-semibold text-slate-500 tracking-widest uppercase">Overview</h2>
+        <button
+          onClick={handleExport}
+          disabled={exporting}
+          className="inline-flex items-center gap-1.5 rounded-md border border-navy-border bg-navy-card/60 px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-cyan-400 hover:border-cyan-500/40 disabled:opacity-50 transition-all"
+        >
+          <Download className="h-3.5 w-3.5" aria-hidden="true" />
+          {exporting ? 'Exporting…' : 'Export CSV'}
+        </button>
+      </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         {cards.map(({ icon, value, label, color }) => (
           <StatCard

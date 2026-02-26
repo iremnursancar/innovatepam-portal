@@ -4,6 +4,7 @@ const { upsertEvaluation } = require('../repositories/evaluationRepository')
 const { findById: findIdeaById, updateStatus } = require('../repositories/ideaRepository')
 const { recordActivity } = require('../repositories/activityRepository')
 const { recordStatusChange } = require('../repositories/statusHistoryRepository')
+const { createNotification } = require('../repositories/notificationRepository')
 
 const VALID_DECISIONS = ['accepted', 'rejected']
 
@@ -50,6 +51,13 @@ function evaluate(ideaId, admin, decision, comment) {
   } catch { /* non-critical */ }
   try {
     recordStatusChange({ ideaId, status: decision, changedBy: admin.email })
+  } catch { /* non-critical */ }
+  try {
+    const notifType    = decision === 'accepted' ? 'accepted' : 'rejected'
+    const notifMessage = decision === 'accepted'
+      ? `Your idea '${idea.title}' was accepted`
+      : `Your idea '${idea.title}' was rejected`
+    createNotification(idea.submitter_id, ideaId, notifType, notifMessage)
   } catch { /* non-critical */ }
 
   return { idea: updatedIdea, evaluation }

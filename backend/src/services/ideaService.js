@@ -14,6 +14,8 @@ const { findByIdeaId: findEvaluation } = require('../repositories/evaluationRepo
 const { recordActivity } = require('../repositories/activityRepository')
 const { recordStatusChange, findByIdeaId: findHistory } = require('../repositories/statusHistoryRepository')
 const { enrichWithVotes, getVoteInfo } = require('../repositories/voteRepository')
+const { createNotification } = require('../repositories/notificationRepository')
+const { findByRole: findUsersByRole } = require('../repositories/userRepository')
 
 /**
  * Submits a new idea, optionally with a file attachment.
@@ -63,6 +65,18 @@ async function submitIdea(submitterId, { title, description, category, isPublic 
 
   try {
     recordStatusChange({ ideaId: idea.id, status: 'submitted', changedBy: idea.submitter_email })
+  } catch { /* non-critical */ }
+
+  try {
+    const admins = findUsersByRole('admin')
+    for (const admin of admins) {
+      createNotification(
+        admin.id,
+        idea.id,
+        'new_submission',
+        `New idea submitted: "${idea.title}"`
+      )
+    }
   } catch { /* non-critical */ }
 
   return { ...idea, attachments: attachment ? [attachment] : [] }
@@ -127,6 +141,14 @@ function markUnderReview(ideaId, admin) {
   try {
     recordStatusChange({ ideaId, status: 'under_review', changedBy: admin?.email ?? 'admin' })
   } catch { /* non-critical */ }
+  try {
+    createNotification(
+      idea.submitter_id,
+      ideaId,
+      'under_review',
+      `Your idea '${idea.title}' is now under review`
+    )
+  } catch { /* non-critical */ }
   return updated
 }
 
@@ -174,11 +196,11 @@ function analyzeIdea({ title, description }) {
   else if (highHits >= 1 || mediumHits >= 2)              impactScore = 'Medium'
   else if (mediumHits >= 1)                               impactScore = 'Medium'
 
-  // --- Similar ideas count ---
+  // --- Similar ideas count (public ideas only to prevent information leakage) ---
   const queryWords = [...new Set(
     `${title} ${description}`.toLowerCase().split(/\W+/).filter(w => w.length > 3)
   )]
-  const allIdeas   = findAll()
+  const allIdeas   = findAll().filter(i => i.is_public === 1)
   const similarIdeasCount = allIdeas.filter(idea => {
     const ideaText = `${idea.title} ${idea.description}`.toLowerCase()
     return queryWords.some(w => ideaText.includes(w))

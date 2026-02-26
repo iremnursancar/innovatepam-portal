@@ -193,13 +193,19 @@ export default function IdeaDetailPage() {
           {/* Admin: "Mark Under Review" button (if still submitted) */}
           {user?.role === 'admin' && idea.status === 'submitted' && (
             <div className="mt-5">
-              <button
-                onClick={handleSetUnderReview}
-                disabled={reviewLoad}
-                className="rounded-md border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm font-medium text-amber-300 hover:bg-amber-500/20 hover:border-amber-500/50 disabled:opacity-50 transition-all"
-              >
-                {reviewLoad ? 'Updating…' : 'Mark as Under Review'}
-              </button>
+              {user?.id === idea.submitter_id ? (
+                <p className="text-sm text-amber-400 bg-amber-400/10 border border-amber-400/30 rounded-md px-3 py-2">
+                  ⚠️ You cannot perform admin actions on your own ideas.
+                </p>
+              ) : (
+                <button
+                  onClick={handleSetUnderReview}
+                  disabled={reviewLoad}
+                  className="rounded-md border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm font-medium text-amber-300 hover:bg-amber-500/20 hover:border-amber-500/50 disabled:opacity-50 transition-all"
+                >
+                  {reviewLoad ? 'Updating…' : 'Mark as Under Review'}
+                </button>
+              )}
             </div>
           )}
         </div>
